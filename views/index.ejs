@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodBridge</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html {
+    scroll-behavior: smooth;
+}
+      body {
+        
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            
+            overflow-x: hidden;
+            
+        }
+        header {
+            background: transparent;
+            padding: 20px 40px;
+        }
+        nav {
+            display: flex;
+            justify-content:start;
+            gap: 200px;
+            align-items: center;
+   
+            
+        }
+ /* login  */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  position: relative;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #aaa;
+}
+.close:hover {
+  color: #333;
+}
+
+.modal-title {
+  text-align: center;
+  margin-bottom: 1.2rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Tabs */
+.tab-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: #666;
+}
+.tab-btn.active {
+  border-bottom: 2px solid #007bff;
+  color: #007bff;
+}
+
+/* Google Login */
+.google-login-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+  border-radius: 6px;
+  width: 100%;
+  cursor: pointer;
+  font-weight: 500;
+}
+.google-login-btn img {
+  height: 20px;
+  width: 20px;
+}
+.google-login-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.divider {
+  text-align: center;
+  margin: 1.2rem 0;
+  position: relative;
+}
+.divider span {
+  background: #fff;
+  padding: 0 12px;
+  position: relative;
+  z-index: 1;
+  color: #999;
+  font-size: 0.85rem;
+}
+.divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: #ccc;
+  left: 0;
+  z-index: 0;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.login-form label {
+  font-size: 0.9rem;
+  color: #333;
+}
+.login-form input,
+.login-form select {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+.login-form input:focus,
+.login-form select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.submit-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+
+
+ /* === */
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #000000;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: black;
+            font-weight: 550;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color:#0694C3
+        }
+        .contact-btn {
+            background: white;
+            color: #0694C3;
+            border: 2px solid #0694C3;
+            padding: 12px 24px;
+            border-radius: 15px;
+            width: 125px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .contact-btn:hover {
+            background: #0694C3;
+            color: white;
+        }
+
+
+
+
+.main{
+    background-image: url("../Images/bacground.jpeg");
+}
+
+        .hero {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 50px 10%;
+            padding-right: 4%;
+           
+        }
+        .hero-content {
+            flex: 1;
+            width: 50%;
+            display: flex;
+            gap: 1px;
+            flex-direction: column;
+        }
+        
+        .hero-image img {
+            animation: slideIn 1.5s ease-in-out;
+        }
+        .hero-content h1 {
+            font-size: 40px;
+            color: #0694C3;
+            padding-left: 1px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            
+        }
+        .hero-content span {
+            font-size: 40px;
+            color: #0694C3;
+            padding-left: 1px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            
+        }
+        .hero-content p {
+            color: #555;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+/* mobile version of hero section  */
+/* Existing CSS remains unchanged */
+
+@media (max-width: 1024px) {
+    /* Tablet view adjustments */
+    header {
+        padding: 15px 30px;
+    }
+    nav ul {
+        gap: 20px;
+    }
+    nav ul li a {
+        font-size: 16px;
+    }
+    .contact-btn {
+        padding: 10px 20px;
+        width: auto;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 5%;
+    }
+    .hero-content {
+        width: 100%;
+    }
+    .hero-content h1 {
+        font-size: 32px;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 450px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile view adjustments */
+    nav {
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+    .logo img {
+        height: 60px;
+    }
+    .hamburger {
+        display: block;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        z-index: 10;
+    }
+    .hamburger div {
+        width: 30px;
+        height: 4px;
+        background-color: black;
+        margin: 6px 0;
+        transition: 0.4s;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        margin-top: 10px;
+        display: none;
+        width: 100%;
+    }
+    nav ul.active {
+        display: flex;
+    }
+    nav ul li {
+        display: block;
+    }
+    .contact-btn {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+    }
+    .mobile-contact {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        padding: 12px 24px;
+        background: white;
+        color: #0694C3;
+        border: 2px solid #0694C3;
+        border-radius: 15px;
+        font-weight: bold;
+        transition: background 0.3s;
+        text-decoration: none;
+    }
+    .mobile-contact:hover {
+        background: #ff685b;
+        color: white;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 5%;
+    }
+    .hero-content {
+        width: 100%;
+    }
+    .hero-content h1 {
+        font-size: 28px;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 400px;
+    }
+}
+
+
+
+
+
+
+
+        .features {
+            display: flex;
+            justify-content: space-around;
+            padding: 50px 10%;
+            padding-top: 20px;
+            gap: 30px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        .feature {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-radius: 8px;
+            width: 30%;
+            transition: all 0.3s;
+        }
+        .feature:hover{
+           border: 2px solid #0694C3;
+           
+
+        }
+        .feature h3 {
+            color: black;
+            font-size: 20px;
+        }
+
+/* features section mobile view */
+@media (max-width: 1024px) {
+    /* Tablet view adjustments */
+    header {
+        padding: 15px 30px;
+    }
+    nav ul {
+        gap: 20px;
+    }
+    nav ul li a {
+        font-size: 16px;
+    }
+    .contact-btn {
+        padding: 10px 20px;
+        width: auto;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 5%;
+    }
+    .hero-content, .hero-image {
+        width: 100%;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 450px;
+    }
+    .features {
+      margin-top:38%;
+     
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature {
+        width: 80%;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile view adjustments */
+    nav {
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+    .logo img {
+        height: 60px;
+    }
+    .hamburger {
+        display: block;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        z-index: 10;
+    }
+    .hamburger div {
+        width: 30px;
+        height: 4px;
+        background-color: black;
+        margin: 6px 0;
+        transition: 0.4s;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        margin-top: 10px;
+        display: none;
+        width: 100%;
+    }
+    nav ul.active {
+        display: flex;
+    }
+    nav ul li {
+        display: block;
+    }
+    .contact-btn {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+    }
+    .mobile-contact {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        padding: 12px 24px;
+        background: white;
+        color: #0694C3;
+        border: 2px solid #0694C3;
+        border-radius: 15px;
+        font-weight: bold;
+        transition: background 0.3s;
+        text-decoration: none;
+    }
+    .mobile-contact:hover {
+        background: #0694C3;
+        color: white;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 5%;
+    }
+    .hero-content, .hero-image {
+        width: 100%;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 350px;
+    }
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature {
+        width: 90%;
+    }
+}
+
+
+
+
+
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* aboutus */
+    .aboutus {
+    margin-top: -1%;
+   background-color: white;
+    display: flex;
+    gap: 200px;
+    /* animation: fadeIn 1.5s ease-in-out; */
+    
+}
+.abouttext{
+    padding-top: 10%;
+
+  
+}
+.abouttext span{
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+font-size: 30px;
+color: #0694C3;
+padding: 6px;
+}
+.abouttext p{
+    font-size: 18px;
+    color: #0694C3;
+    margin-bottom: 20px;
+    width: 70%;
+    color: #9a9f9e;
+    line-height: 1.9;
+    text-align: justify;
+    padding-top: 4px;
+
+}
+.abouthead{
+    
+    font-size: 30px;
+}
+
+/* about us mobile  */
+/* Existing CSS remains unchanged */
+
+@media (max-width: 1024px) {
+    /* Tablet view adjustments */
+    header {
+        padding: 15px 30px;
+    }
+    nav ul {
+        gap: 20px;
+    }
+    nav ul li a {
+        font-size: 16px;
+    }
+    .contact-btn {
+        padding: 10px 20px;
+        width: auto;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 5%;
+    }
+    .hero-content, .hero-image {
+        width: 100%;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 450px;
+    }
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature {
+        width: 80%;
+    }
+    .aboutus {
+        flex-direction: column;
+        text-align: center;
+        gap: 50px;
+        padding: 40px 5%;
+    }
+    .aboutimage img {
+        width: 100%;
+        max-width: 450px;
+    }
+    .abouttext p {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile view adjustments */
+    nav {
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+    .logo img {
+        height: 60px;
+    }
+    .hamburger {
+        display: block;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        z-index: 10;
+    }
+    .hamburger div {
+        width: 30px;
+        height: 4px;
+        background-color: black;
+        margin: 6px 0;
+        transition: 0.4s;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        margin-top: 10px;
+        display: none;
+        width: 100%;
+    }
+    nav ul.active {
+        display: flex;
+    }
+    nav ul li {
+        display: block;
+    }
+    .contact-btn {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+    }
+    .mobile-contact {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        padding: 12px 24px;
+        background: white;
+        color: #0694C3;
+        border: 2px solid #0694C3;
+        border-radius: 15px;
+        font-weight: bold;
+        transition: background 0.3s;
+        text-decoration: none;
+    }
+    .mobile-contact:hover {
+        background: #0694C3;
+        color: white;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 5%;
+    }
+    .hero-content, .hero-image {
+        width: 100%;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 350px;
+    }
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature {
+        width: 90%;
+    }
+    .aboutus {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+        padding: 30px 5%;
+    }
+    .aboutimage img {
+        width: 100%;
+        max-width: 350px;
+    }
+    .abouttext p {
+        width: 100%;
+    }
+}
+
+.services{
+
+   background-color: white;
+    padding-top: 2%;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+.servicetext h1{
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-weight: 600;
+}
+.servicetext span{
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+font-size: 30px;
+color: #0694C3;
+padding: 6px;
+}
+.servicesbox{
+    padding-top: 5%;
+    display: flex;
+}
+.serviceitem{
+    width: 30%;
+}
+.servicehead{
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+.features1{
+            display: flex;
+            justify-content: space-around;
+            padding: 50px 10%;
+            padding-top: 20px;
+            margin-top: 3%;
+            gap: 30px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        .features1 h1{
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .feature1{
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .feature1:hover{
+           border: 0.5px solid #0694C3;
+           
+
+        }
+        .feature1 p{
+            font-size: 14px;
+            text-align: center;
+            color: grey;
+            letter-spacing: 0.2px;
+            
+
+        }
+        .contact-btn {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+    }
+    .mobile-contact {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        padding: 12px 24px;
+        background: white;
+        color: #0694C3;
+        border: 2px solid #0694C3;
+        border-radius: 15px;
+        font-weight: bold;
+        transition: background 0.3s;
+        text-decoration: none;
+    }
+
+/* servies section mobile view  */
+
+@media (max-width: 1024px) {
+    /* Tablet view adjustments */
+    header {
+        padding: 15px 30px;
+    }
+    nav ul {
+        gap: 20px;
+    }
+    nav ul li a {
+        font-size: 16px;
+    }
+    .contact-btn {
+        padding: 10px 20px;
+        width: auto;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 5%;
+    }
+    .hero-content, .hero-image {
+        width: 100%;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 450px;
+    }
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature {
+        width: 80%;
+    }
+    .aboutus {
+        flex-direction: column;
+        text-align: center;
+        gap: 50px;
+        padding: 40px 5%;
+    }
+    .aboutimage img {
+        width: 100%;
+        max-width: 450px;
+    }
+    .abouttext p {
+        width: 100%;
+    }
+    .features1 {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .feature1 {
+        width: 45%;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile view adjustments */
+    nav {
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        gap: 10px;
+    }
+    .logo img {
+        height: 83px;
+    }
+    .hamburger {
+        display: block;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        z-index: 10;
+    }
+    .hamburger div {
+        width: 30px;
+        height: 4px;
+        background-color: black;
+        margin: 6px 0;
+        transition: 0.4s;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        margin-top: 10px;
+        display: none;
+        width: 100%;
+    }
+    nav ul.active {
+        display: flex;
+    }
+    nav ul li {
+        display: block;
+    }
+    .contact-btn {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+    }
+    .mobile-contact {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        padding: 12px 24px;
+        background: white;
+        color: #0694C3;
+        border: 2px solid #0694C3;
+        border-radius: 15px;
+        font-weight: bold;
+        transition: background 0.3s;
+        text-decoration: none;
+    }
+    .mobile-contact:hover {
+        background: #0694C3;
+        color: white;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 5%;
+    }
+    .hero-content, .hero-image {
+        width: 100%;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 350px;
+    }
+    .features {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 0;
+    }
+    .feature {
+        width: 90%;
+    }
+    .aboutus {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+        padding: 30px 5%;
+    }
+    .aboutimage img {
+        width: 100%;
+        max-width: 350px;
+    }
+    .abouttext p {
+        width: 100%;
+    }
+    .features1 {
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+    }
+    .feature1 {
+        width: 90%;
+    }
+}
+
+
+.foot{
+background-image: url("../Images/bacground.jpeg");
+}
+
+        .footer{
+            
+            
+            display: flex;
+            justify-content: space-around;
+            color: white;
+        }
+        .footer1{
+            padding: 50px;
+            padding-bottom: 3%;
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+            width: 30%;
+        }
+        .footer1 h1{
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #131313;
+            
+        }
+        .footer1 p{
+            font-size: 16px;
+            color: grey;
+            font-weight: 300;
+            line-height: 1.5;
+            
+        }
+        .footer2{
+            padding: 10px ;
+            padding-bottom: 3%;
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+            width: 20%;
+           
+        }
+        .footer2 h2{
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: left;
+            font-weight: 600;
+            color: #131313;
+        }
+        .footer2 li ul {
+            
+            display: flex;
+            gap: 10px;
+        }
+        .footer2 ul{
+            list-style-type:disc;
+            text-align: left;
+            color: #000;
+    
+        }
+
+        .footer2 a{
+            text-decoration: none;
+            color: grey;
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.5;
+        }
+        .footer2 a:hover{
+            text-decoration: underline;
+        }
+        .footer3{
+            
+            padding: 10px;
+            padding-bottom: 3%;
+            display: flex;
+            gap: 2px;
+            flex-direction: column;
+            width: 25%;
+            padding-right: 5%;
+            
+        }
+        .footer3 h2{
+            font-size: 24px;
+            margin-bottom: 2px;
+            text-align: left;
+            font-weight: 600;
+            color: #131313;
+        }
+        .footer3 p{
+            margin: 10px;
+            font-size: 16px;
+            color: grey;
+            font-weight: 300;
+            line-height: 1.5;
+        }
+        .footer3 span{
+            padding-right: 4px;
+            color: black;
+        }
+        .links{
+            display: flex;
+            gap: 20px;
+            padding-top: 3px;
+            justify-items: center;
+            padding-left: 20%;
+        }
+
+
+/* techology */
+.NGO\'s{
+    background-color: white;
+    margin-top: -3%;
+    
+}
+.NGO\'s span{
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+font-size: 38px;
+color: #0694C3;
+padding: 6px;
+}
+.technology h2{
+    padding-top: 4%;
+    font-size: 35px;
+            color: #0694C3;
+           text-align: center;
+          
+            line-height: 1.5;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.slide img {
+  width: 200px;
+  height: 90px;
+  animation: scroll 12s linear infinite;
+}
+
+.slide-track {
+  width: 100%;
+  display: flex;
+  gap: 3em;
+  overflow: hidden;
+}
+
+.slider {
+  margin-top: 20px;
+  background-color: white;
+  padding: 8em 2em;
+}
+
+@keyframes scroll {
+  0% {transform: translateX(0);}
+  100% {transform: translatex(-860%)}
+}
+
+
+
+/* contact us  */
+/* General Styles */
+/* General Styles */
+.contact {
+    width: 100%;
+    background-color: white;
+    padding: 5% 10%;
+}
+
+.contain {
+    background-color: white;
+    max-width: 1170px;
+    width: 100%;
+    margin: auto;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.form {
+    background-color: white;
+}
+
+.contact-wrapper {
+    margin-top: 20px;
+}
+
+/* Form Styling */
+.form span {
+text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+font-size: 30px;
+color: #0694C3;
+font-size: 30px;
+}
+
+.submit-btn, .reset-btn {
+    width: 100%;
+    text-align: center;
+}
+
+.form-headline:after {
+    content: "";
+    display: block;
+    width: 50px;
+    border-bottom: 3px solid #0694C3;
+    margin-top: 10px;
+}
+
+.form-input, textarea {
+    width: 100%;
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+textarea {
+    resize: none;
+}
+
+button, .submit-btn {
+    background: transparent;
+    border: 1px solid #0694C3;
+    color: #0694C3;
+    border-radius: 15px;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+button:hover, .submit-btn:hover {
+    background: #0694C3;
+    color: white;
+}
+
+.error {
+    color: #ec1c24;
+}
+
+/* Contact Details */
+.contacts {
+    color: #212d31;
+    text-align: center;
+    padding: 20px;
+}
+
+.hightlight-contact-info {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.email-info {
+    margin-top: 15px;
+}
+
+
+
+
+/* Responsive Styles */
+@media (min-width: 700px) {
+    .contact{
+        width: 79%;
+    }
+    .wrapper {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+    .submit-btn, .reset-btn {
+        width: auto;
+    }
+    .footer {
+        flex-direction: row;
+        justify-content: space-around;
+        text-align: left;
+    }
+    .footer1, .footer2, .footer3 {
+        max-width: 250px;
+        text-align: left;
+    }
+}
+
+@media (max-width: 699px) {
+    .contact{    width: 79%;}
+    .wrapper {
+        flex-direction: column;
+    }
+    .form span {
+        font-size: 16px;
+    }
+    .hightlight-contact-info {
+        font-size: 16px;
+    }
+    .footer {
+        width: 70%;
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer1, .footer2, .footer3 {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 70px;
+        text-align: center;
+    }
+    .footer .links {
+        justify-content: center;
+    }
+}
+
+
+/* Default: Desktop Layout (Image on Left, Text on Right) */
+.aboutimage img {
+   
+    content: url('../Images/aboutusimg.png'); /* Default Image */
+}
+
+
+
+/* For Tablets (width up to 1024px) */
+@media (max-width: 1024px) {
+    .aboutus {
+        flex-direction: column-reverse; /* Text Above, Image Below */
+        text-align: center;
+    }
+
+    .aboutimage img {
+        content: url('Images/aboutimg.png'); /* Tablet Image */
+        width: 400px; /* Adjust size */
+    }
+}
+
+/* For Mobile Devices (width up to 768px) */
+@media (max-width: 768px) {
+    .aboutus {
+        flex-direction: column-reverse; /* Text Above, Image Below */
+        text-align: center;
+    }
+
+    .aboutimage img {
+        content: url('Images/aboutimg.png'); /* Mobile Image */
+        width: 300px; /* Adjust size */
+    }
+}
+    </style>
+    <link rel="icon" type="image/x-icon"  href="../Images/logo.png">
+</head>
+
+<link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
+<body>
+    <div class="main" id="main">
+    <header>
+        <nav>
+          <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+
+<header style="width: 100%; background-color: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: fixed; top: 0; left: 0; z-index: 999;">
+  <nav style="display: flex; align-items: center; justify-content: space-between; height: 45px; padding: 0 20px; font-family: Arial, sans-serif; line-height: 1;">
+
+    <!-- Logo (Left) -->
+   <div class="logo" style="flex: 1; display: flex; align-items: center;">
+  <a href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;" style="display: inline-block;">
+    <img src="../Images/logo_nobg.png" alt="Logo" height="100" style="vertical-align: middle; margin-left: -50px;">
+  </a>
+</div>
+
+
+    <!-- Center Nav Links -->
+<ul style="flex: 2; display: flex; justify-content: center; align-items: center; list-style: none; margin: 0; padding: 0; gap: 30px;">
+<li><a href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">Home</a></li>
+<li><a href="#aboutus" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">About us</a></li>
+<li><a href="#services" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">Services</a></li>
+<li><a href="#NGO's" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">NGO's</a></li>
+
+    </ul>
+
+    <!-- Login/Register (Right) -->
+    <div style="flex: 1; text-align: right; padding-right: 70px;">
+  <a href="#" onclick="openLoginModal()" 
+     style="display: inline-flex; align-items: center; gap: 6px; background-color: white; color: black; font-size: 18px; font-weight: 600; text-decoration: none; padding: 6px 14px; border-radius: 8px;">
+    <span style="font-size: 18px;">👤</span>
+    Login / Register
+  </a>
+</div>
+
+
+  </nav>
+</header>
+
+
+
+    
+    <section class="hero">
+        <div class="hero-content">
+  <h1><span>Bridge the Gap </span> <br> <strong>End Food Waste</strong></h1>
+  <p>Connect surplus food from restaurants and individuals with verified NGOs. Together, we can fight hunger while reducing food waste in our communities.</p>
+
+  
+</div>
+
+       <div class="hero-image">
+  <img id="slideshow" src="/Images/feed1.png" alt="FoodBridge Slideshow" width="550" style="opacity: 1;">
+</div>
+
+<style>
+  .hero-image img {
+    transition: opacity 1s ease-in-out;
+  }
+</style>
+
+<script>
+  const images = [
+    "/Images/feed1.png",
+    "/Images/feed2.png",
+    "/Images/feed3.png"
+  ];
+
+  let currentIndex = 0;
+  const slideshow = document.getElementById("slideshow");
+
+  function changeImage() {
+    // Fade out
+    slideshow.style.opacity = 0;
+
+    // Wait for fade out to complete before changing image
+    setTimeout(() => {
+      currentIndex = (currentIndex + 1) % images.length;
+      slideshow.src = images[currentIndex];
+      // Fade in
+      slideshow.style.opacity = 1;
+    }, 1000); // Delay matches the CSS transition time
+  }
+
+  setInterval(changeImage, 4000); // Change image every 4 seconds
+</script>
+   
+    </section>
+</div>
+    
+    <section class="features">
+        <div class="feature">
+            <img src="../Images/meals_served.png" alt="Meals served" width="60">
+            <h3>Meals served</h3>
+            <hr width="25%" color="#0694C3">
+            <p style="font-weight: bold; font-size: 32px; color: green;">127,543</p>
+            <p>Lives touched through food donations</p> 
+            <p style="font-weight: bold; font-size: 15px; color: orange;">+23% this month</p>
+        </div>
+        <div class="feature">
+            <img src="../Images/Active_donors.png" alt="Active donors" width="60">
+            <h3>Active donors</h3>
+            <hr width="25%" color="#0694C3">
+            <p style="font-weight: bold; font-size: 32px; color: green;">2,847</p>
+            <p>Restaurants and individuals donating</p> 
+            <p style="font-weight: bold; font-size: 15px; color: orange;">+15% this month</p>
+        </div>
+        <div class="feature">
+            <img src="../Images/Partnered_ngos.png" alt="Partnered ngos" width="60">
+            <h3>Partnered NGO's</h3>
+            <hr width="25%" color="#0694C3" >
+          <p style="font-weight: bold; font-size: 32px; color: green;">156</p>
+          <p>Verified organizations receiving food</p> 
+            <p style="font-weight: bold; font-size: 15px; color: orange;">+8% this month</p>
+        </div>
+    </section>
+    <section class="aboutus" id="aboutus">
+        <div class="aboutimage">
+            <img src="../Images/aboutusimg.png" alt="About Us Image" width="500">
+        </div>
+        <div class="abouttext">
+            <h1><span>Our Vision</span> </h1>
+                <p>We bridge the gap between generous food donors and NGOs dedicated to hunger relief. Our mission is to reduce food waste and fight hunger by making food donation simple, smart, and impactful.
+Through our platform, individuals, restaurants, and event organizers can donate excess food in just a few taps. Our intelligent chatbot ensures smooth communication, while real-time GPS tracking keeps you informed about your food’s journey. 
+Once the donation is successfully delivered, we reward your contribution — because every act of kindness deserves appreciation.</p>
+
+<p>At FoodBridge, we believe no meal should go to waste when a hungry soul can be fed.</p>
+        </div>
+    </section>
+
+   <section class="NGO's" id="NGO's" style="text-align: center; padding: 2rem;">
+  <h1><span>Our Top Partner NGOs</span></h1>
+
+  <marquee behavior="scroll" direction="left" scrollamount="15" style="margin-top: 2rem;">
+    <div style="display: flex; gap: 3rem;">
+      <img src="/Images/ngo1.png" alt="Feeding India" style="width: 300px; height: 300px; object-fit: contain;">
+      <img src="/Images/ngo2.png" alt="Robin Hood Army" style="width: 300px; height: 300px; object-fit: contain;">
+      <img src="/Images/ngo3.png" alt="Akshaya Patra" style="width: 300px; height: 300px; object-fit: contain;">
+      <img src="/Images/ngo4.png" alt="Goonj" style="width: 300px; height: 300px; object-fit: contain;">
+    </div>
+  </marquee>
+</section>
+
+
+
+
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeLoginModal()">&times;</span>
+
+    <!-- Tabs -->
+    <div class="tab-buttons">
+      <button class="tab-btn active" onclick="showTab('login')">Login</button>
+      <button class="tab-btn" onclick="showTab('register')">Register</button>
+    </div>
+
+    <!-- Login Tab -->
+    <div class="tab-content" id="login-tab">
+      <h2 class="modal-title">Welcome Back</h2>
+
+      <button class="google-login-btn" onclick="loginWithGoogle()">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo">
+        Login with Google
+      </button>
+
+      <div class="divider"><span>OR</span></div>
+
+      <form class="login-form">
+        <label>Email</label>
+        <input type="email" required placeholder="you@example.com">
+
+        <label>Password</label>
+        <input type="password" required placeholder="Enter your password">
+
+        <button type="submit" class="submit-btn">Login</button>
+      </form>
+    </div>
+
+    <!-- Register Tab -->
+    <div class="tab-content" id="register-tab" style="display:none;">
+      <h2 class="modal-title">Create Account</h2>
+
+      <form class="login-form">
+        <label>Full Name</label>
+        <input type="text" required placeholder="Your name">
+
+        <label>Email</label>
+        <input type="email" required placeholder="you@example.com">
+
+        <label>Password</label>
+        <input type="password" required placeholder="Create a password">
+
+        <label>Register As</label>
+        <select required>
+          <option value="">Select type</option>
+          <option value="donor">Donor</option>
+          <option value="ngo">NGO</option>
+        </select>
+
+        <button type="submit" class="submit-btn">Register</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+    </section>
+
+    <section class="services" id="services" style="padding: 40px; background-color: #f9f9f9;">
+    <div class="servicetext" style="max-width: 800px; margin: 0 auto; font-family: Arial, sans-serif;">
+        <h1 style="font-size: 28px; text-align: center; color: #333;">
+            <span>How will your donations be used?</span>
+        </h1>
+        <ul style="list-style: none; padding: 0; margin-top: 30px;">
+            <li style="margin-bottom: 20px; font-size: 16px; line-height: 1.6; color: #555;">
+                🥗 <strong>Food Collection & Distribution:</strong><br>
+                Ensures timely pickup of surplus food from restaurants, events, and households and delivers it safely to verified NGOs and communities in need.
+            </li>
+            <li style="margin-bottom: 20px; font-size: 16px; line-height: 1.6; color: #555;">
+                🚚 <strong>Logistics & Transportation:</strong><br>
+                Supports fuel and transportation costs for our delivery volunteers and vehicles to reach remote or underserved areas.
+            </li>
+            <li style="margin-bottom: 20px; font-size: 16px; line-height: 1.6; color: #555;">
+                🤝 <strong>NGO Support & Coordination:</strong><br>
+                Helps maintain strong partnerships with local NGOs, ensuring food reaches the right hands efficiently and responsibly.
+            </li>
+            <li style="margin-bottom: 20px; font-size: 16px; line-height: 1.6; color: #555;">
+                📦 <strong>Packaging & Safety:</strong><br>
+                Covers packaging material and hygiene supplies to keep food fresh, safe, and ready for redistribution.
+            </li>
+            <li style="margin-bottom: 20px; font-size: 16px; line-height: 1.6; color: #555;">
+                💡 <strong>Technology & Outreach:</strong><br>
+                Funds platform maintenance, chatbot support, GPS tracking, and public awareness campaigns to expand our impact.
+            </li>
+        </ul>
+    </div>
+</section>
+
+    <section class="contact" id="contact">
+        <div class="contain">
+
+            <div class="wrapper">
+          
+                <div class="form">
+                    <h1><span>GET IN TOUCH</span></h1>
+                    <h2 class="form-headline">Send us a message</h2>
+                    <form id="submit-form" action="/sendmail" method="post">
+                        <p>
+                            <input id="name" class="form-input" name="name" type="text" placeholder="Your Name" required>
+                            <small class="name-error"></small>
+                        </p>
+                        <p>
+                            <input id="email" class="form-input" name="email" type="email" placeholder="Your Email" required>
+                            <small class="name-error"></small>
+                        </p>
+                        <p class="full-width">
+                            <input id="company-name" class="form-input" name="companyname" type="text" placeholder="Company Name" required>
+                            <small></small>
+                        </p>
+                        <p class="full-width">
+                            <textarea minlength="20" id="message" cols="30" rows="7" name="requirement" placeholder="Your Requirement" required></textarea>
+                            <small></small>
+                        </p>
+                        <p class="full-width">
+                            <input type="checkbox" id="checkbox" name="checkbox" checked> Yes, I would like to receive communications by call / email about Company's services.
+                        </p>
+                        <p class="full-width">
+                            <input type="submit" class="submit-btn" value="Submit">
+                        </p>
+                    </form>
+                </div>
+                
+            </div>
+          </div>
+    </section>
+    <div class="foot">
+    <footer class="footer">
+        <div class="footer1">
+            <h1>FoodBridge</h1>
+            <p>Connecting surplus food with those in need. Building bridges to end hunger and reduce waste in our communities.</p>
+            <div class="links">
+                <a href="#"><img src="../Images/footer/facebook (1).png" width="30" height="30" alt="Facebook"></a>
+                <a href="https://www.instagram.com/ariestechserv?utm_source=ig_web_button_share_sheet&igsh=ODdmZWVhMTFiMw=="><img src="../Images/footer/instagram.png" width="30" height="30" alt="Instagram"></a>
+                <a href="#"><img src="..//Images/footer/linkedin.png" width="30" height="30" alt="LinkedIn"></a>
+                <a href="#"><img src="../Images/footer/twitter.png" width="30" height="30" alt="Twitter"></a>
+            </div>
+        </div>
+        <div class="footer2">
+            <h2>Quick Links</h2>
+            <ul>
+                <li><a href="#main">Home</a></li>
+                <li><a href="#aboutus">About Us</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#NGO's">NGO's</a></li>
+        </div>
+        <div class="footer3">
+            <h2>Get In Touch</h2>
+            <p>Excited to discuss how we can tailor our solutions to fit your needs</p>
+            <p><span><i class="ri-map-pin-fill"></i></span>Mahavir ward,Ganesh nagar Gondiya</p>
+            <p><span><i class="ri-phone-fill"></i></span>95610 50346</p>
+            <p><span><i class="ri-mail-fill"></i></span>ariestechserv@gmail.com</p>
+
+        </div>
+    </footer>
+</div>
+
+    
+</body>
+
+<script>
+    const nameEl = document.querySelector("#name");
+const emailEl = document.querySelector("#email");
+const companyNameEl = document.querySelector("#company-name");
+const messageEl = document.querySelector("#message");
+
+const form = document.querySelector("#submit-form");
+
+
+function reset() {
+  nameEl = "";
+  emailEl = "";
+  companyNameEl = "";
+  messageEl = "";
+  document.querySelector(".name-error").innerText = "";
+}
+
+function toggleMenu() {
+        document.querySelector("nav ul").classList.toggle("active");
+    }
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute("href").substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop - 80, // Adjust for navbar height
+                behavior: "smooth",
+            });
+        }
+    });
+});
+function openLoginModal() {
+  document.getElementById("loginModal").style.display = "flex";
+}
+function closeLoginModal() {
+  document.getElementById("loginModal").style.display = "none";
+}
+function loginWithGoogle() {
+  alert("Google login clicked — integrate Firebase or OAuth here.");
+}
+
+function showTab(tab) {
+  // Hide both tabs
+  document.getElementById('login-tab').style.display = 'none';
+  document.getElementById('register-tab').style.display = 'none';
+
+  // Remove active class
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+  // Show selected tab
+  if (tab === 'login') {
+    document.getElementById('login-tab').style.display = 'block';
+    document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+  } else {
+    document.getElementById('register-tab').style.display = 'block';
+    document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+  }
+}function openLoginModal() {
+  document.getElementById("loginModal").style.display = "flex";
+}
+function closeLoginModal() {
+  document.getElementById("loginModal").style.display = "none";
+}
+function loginWithGoogle() {
+  alert("Google login clicked — integrate Firebase or OAuth here.");
+}
+
+function showTab(tab) {
+  // Hide both tabs
+  document.getElementById('login-tab').style.display = 'none';
+  document.getElementById('register-tab').style.display = 'none';
+
+  // Remove active class
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+  // Show selected tab
+  if (tab === 'login') {
+    document.getElementById('login-tab').style.display = 'block';
+    document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+  } else {
+    document.getElementById('register-tab').style.display = 'block';
+    document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+  }
+}
+</script>
+
+</html>
