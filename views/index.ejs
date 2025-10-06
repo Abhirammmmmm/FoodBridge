@@ -1370,12 +1370,20 @@ button:hover, .submit-btn:hover {
     </ul>
 
     <!-- Login/Register (Right) -->
-    <div style="flex: 1; text-align: right; padding-right: 70px;">
-  <a href="#" onclick="openLoginModal()" 
-     style="display: inline-flex; align-items: center; gap: 6px; background-color: white; color: black; font-size: 18px; font-weight: 600; text-decoration: none; padding: 6px 14px; border-radius: 8px;">
-    <span style="font-size: 18px;">👤</span>
-    Login / Register
-  </a>
+<div style="flex: 1; text-align: right; padding-right: 70px;">
+  <% if (userData) { %>
+    <div style="display: inline-flex; align-items: center; gap: 8px; background-color: white; color: black; font-size: 18px; font-weight: 600; padding: 6px 14px; border-radius: 8px;">
+      <span style="font-size: 18px;">👤</span>
+      <%= userData.name %>
+      <a href="/logout" style="margin-left: 10px; font-size: 14px; color: red; text-decoration: none;">Logout</a>
+    </div>
+  <% } else { %>
+    <a href="#" onclick="openLoginModal()" 
+       style="display: inline-flex; align-items: center; gap: 6px; background-color: white; color: black; font-size: 18px; font-weight: 600; text-decoration: none; padding: 6px 14px; border-radius: 8px;">
+      <span style="font-size: 18px;">👤</span>
+      Login / Register
+    </a>
+  <% } %>
 </div>
 
 
@@ -1509,12 +1517,12 @@ Once the donation is successfully delivered, we reward your contribution — bec
 
       <div class="divider"><span>OR</span></div>
 
-      <form class="login-form">
+      <form class="login-form" action="/login" method="post" >
         <label>Email</label>
-        <input type="email" required placeholder="you@example.com">
+        <input type="email" name="email" required placeholder="you@example.com">
 
         <label>Password</label>
-        <input type="password" required placeholder="Enter your password">
+        <input type="password" name="password" required placeholder="Enter your password">
 
         <button type="submit" class="submit-btn">Login</button>
       </form>
@@ -1524,18 +1532,18 @@ Once the donation is successfully delivered, we reward your contribution — bec
     <div class="tab-content" id="register-tab" style="display:none;">
       <h2 class="modal-title">Create Account</h2>
 
-      <form class="login-form">
+      <form class="login-form" action="/registrationUser" method="post">
         <label>Full Name</label>
-        <input type="text" required placeholder="Your name">
+        <input type="text" name="fullname" required placeholder="Your name">
 
         <label>Email</label>
-        <input type="email" required placeholder="you@example.com">
+        <input type="email"  name="email" required placeholder="you@example.com">
 
         <label>Password</label>
-        <input type="password" required placeholder="Create a password">
+        <input type="password" name="password" required placeholder="Create a password">
 
         <label>Register As</label>
-        <select required>
+        <select required name="role">
           <option value="">Select type</option>
           <option value="donor">Donor</option>
           <option value="ngo">NGO</option>
@@ -1703,6 +1711,47 @@ function showTab(tab) {
     document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
   }
 }
+
+ function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  const token = getCookie('token');
+
+  if (token) {
+    // call your backend to get user info
+    fetch('/api/user', {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Invalid token');
+      return res.json();
+    })
+    .then(user => {
+      // replace login link with user info
+      const userSection = document.getElementById('userSection');
+      userSection.innerHTML = `
+        <div style="display: inline-flex; align-items: center; gap: 8px; background-color: white; color: black; font-size: 18px; font-weight: 600; padding: 6px 14px; border-radius: 8px;">
+          <span style="font-size: 18px;">👤</span>
+          ${user.name || 'User'}
+          <a href="#" onclick="logout()" style="margin-left: 10px; font-size: 14px; color: red; text-decoration: none;">Logout</a>
+        </div>
+      `;
+    })
+    .catch(() => {
+      // token invalid or API failed — clear cookie
+      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    });
+  }
+
+  function logout() {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    location.reload();
+  }
 </script>
 
 </html>
