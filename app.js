@@ -1,3 +1,4 @@
+const chatbotRoute = require("./routes/chatbotRoute");
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
@@ -11,6 +12,7 @@ db();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(chatbotRoute);
 
 // ✅ Serve static files from "public" folder
 app.use(express.static("public"));

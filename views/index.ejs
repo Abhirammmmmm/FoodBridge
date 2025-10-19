@@ -260,7 +260,7 @@
         }
         .hero-content span {
             font-size: 40px;
-            color: #0694C3;
+            color: white;
             padding-left: 1px;
             line-height: 1.5;
             margin-bottom: 10px;
@@ -270,7 +270,7 @@
             
         }
         .hero-content p {
-            color: #555;
+            color: white;
             line-height: 1.6;
             font-size: 16px;
         }
@@ -1395,7 +1395,7 @@ button:hover, .submit-btn:hover {
     
     <section class="hero">
         <div class="hero-content">
-  <h1><span>Bridge the Gap </span> <br> <strong>End Food Waste</strong></h1>
+  <h1><span>Bridge the Gap </span> <br> <span>End Food Waste</span></h1>
   <p>Connect surplus food from restaurants and individuals with verified NGOs. Together, we can fight hunger while reducing food waste in our communities.</p>
 
   
@@ -1619,6 +1619,80 @@ Once the donation is successfully delivered, we reward your contribution — bec
         </div>
     </footer>
 </div>
+<!-- 💬 Chatbot Widget -->
+<div id="chatbot-container" class="chatbot-container hidden">
+  <div class="chatbot-header">🤖 FoodBridge Chat</div>
+  <div id="chatbot-messages" class="chatbot-messages"></div>
+  <div class="chatbot-input">
+    <input id="chatbot-input-field" type="text" placeholder="Ask something..." />
+    <button id="chatbot-send-btn">Send</button>
+  </div>
+</div>
+
+<button id="chatbot-toggle-btn" class="chatbot-toggle">💬</button>
+
+<style>
+  .chatbot-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff5a5f;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 9999;
+  }
+  .chatbot-container {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 320px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+  }
+  .chatbot-header {
+    background-color: #ff5a5f;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+  }
+  .chatbot-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 300px;
+    font-size: 14px;
+  }
+  .chatbot-input {
+    display: flex;
+    border-top: 1px solid #ddd;
+  }
+  .chatbot-input input {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    outline: none;
+  }
+  .chatbot-input button {
+    background-color: #ff5a5f;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  .chatbot-container.hidden { display: none; }
+</style>
 
     
 </body>
@@ -1751,6 +1825,50 @@ function showTab(tab) {
   function logout() {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     location.reload();
+  }
+</script>
+
+<script>
+  const toggleBtn = document.getElementById("chatbot-toggle-btn");
+  const chatbotContainer = document.getElementById("chatbot-container");
+  const sendBtn = document.getElementById("chatbot-send-btn");
+  const inputField = document.getElementById("chatbot-input-field");
+  const messagesDiv = document.getElementById("chatbot-messages");
+
+  toggleBtn.addEventListener("click", () => {
+    chatbotContainer.classList.toggle("hidden");
+  });
+
+  sendBtn.addEventListener("click", sendMessage);
+  inputField.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+
+  async function sendMessage() {
+    const userMsg = inputField.value.trim();
+    if (!userMsg) return;
+
+    appendMessage("You", userMsg);
+    inputField.value = "";
+
+    try {
+      const res = await fetch("/api/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMsg }),
+      });
+      const data = await res.json();
+      appendMessage("Bot", data.reply);
+    } catch (err) {
+      appendMessage("Bot", "⚠️ Error connecting to chatbot.");
+    }
+  }
+
+  function appendMessage(sender, text) {
+    const div = document.createElement("div");
+    div.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    messagesDiv.appendChild(div);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
   }
 </script>
 
