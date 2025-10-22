@@ -1340,16 +1340,7 @@ button:hover, .submit-btn:hover {
 />
 <body>
     <div class="main" id="main">
-    <header>
-        <nav>
-          <div class="hamburger" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-
-
-<header style="width: 100%; background-color: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: fixed; top: 0; left: 0; z-index: 999;">
+    <header style="width: 100%; background-color: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: fixed; top: 0; left: 0; z-index: 999;">
   <nav style="display: flex; align-items: center; justify-content: space-between; height: 45px; padding: 0 20px; font-family: Arial, sans-serif; line-height: 1;">
 
     <!-- Logo (Left) -->
@@ -1370,7 +1361,7 @@ button:hover, .submit-btn:hover {
     </ul>
 
     <!-- Login/Register (Right) -->
-<div style="flex: 1; text-align: right; padding-right: 70px;">
+<div id="userSection" style="flex: 1; text-align: right; padding-right: 70px;">
   <% if (userData) { %>
     <div style="display: inline-flex; align-items: center; gap: 8px; background-color: white; color: black; font-size: 18px; font-weight: 600; padding: 6px 14px; border-radius: 8px;">
       <span style="font-size: 18px;">👤</span>
@@ -1387,7 +1378,7 @@ button:hover, .submit-btn:hover {
 </div>
 
 
-  </nav>
+    </nav>
 </header>
 
 
@@ -1397,6 +1388,12 @@ button:hover, .submit-btn:hover {
         <div class="hero-content">
   <h1><span>Bridge the Gap </span> <br> <span>End Food Waste</span></h1>
   <p>Connect surplus food from restaurants and individuals with verified NGOs. Together, we can fight hunger while reducing food waste in our communities.</p>
+<div style="flex: 1; text-align: right; padding-right: 20px;">
+  <button class="contact-btn" onclick="handleDonate()" 
+          style="background-color:#1E40AF; color:white; padding:6px 14px; border-radius:8px; font-weight:600; border:none; cursor:pointer;">
+    Donate
+  </button>
+</div>
 
   
 </div>
@@ -1694,7 +1691,92 @@ Once the donation is successfully delivered, we reward your contribution — bec
   .chatbot-container.hidden { display: none; }
 </style>
 
+    <!-- Donation Modal Overlay -->
+<div id="donationModal" style="display:none; position:fixed; inset:0; background-color:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center;">
+  <div style="background:white; border-radius:12px; width:360px; max-width:90%; padding:20px; box-shadow:0 8px 25px rgba(0,0,0,0.3);">
     
+    <!-- Header -->
+    <h2 id="donationTitle" style="text-align:center; font-size:20px; font-weight:700; margin-bottom:15px;">Choose Donation Type</h2>
+    
+    <!-- Type Selection Buttons -->
+    <div id="donationTypeSelection" style="display:flex; justify-content:center; gap:15px; margin-bottom:20px;">
+      <button onclick="showForm('monetary')" style="flex:1; padding:10px; border-radius:8px; border:none; background:#1E40AF; color:white; font-weight:600; cursor:pointer;">Monetary</button>
+      <button onclick="showForm('food')" style="flex:1; padding:10px; border-radius:8px; border:none; background:#10B981; color:white; font-weight:600; cursor:pointer;">Food</button>
+    </div>
+
+    <!-- Monetary Form -->
+    <form id="monetaryForm" action="/donate/money" method="POST" style="display:none; flex-direction:column; gap:12px;">
+      <input type="text" name="name" placeholder="Name" required style="padding:8px; border-radius:6px; border:1px solid #ccc;">
+      <input type="text" name="address" placeholder="Address" required style="padding:8px; border-radius:6px; border:1px solid #ccc;">
+      <input type="number" name="amount" placeholder="Amount" required style="padding:8px; border-radius:6px; border:1px solid #ccc;">
+      <button type="submit" style="padding:10px; border:none; border-radius:8px; background:#1E40AF; color:white; font-weight:600; cursor:pointer;">Donate</button>
+      <button type="button" onclick="closeModal()" style="padding:10px; border:none; border-radius:8px; background:red; color:white; font-weight:600; cursor:pointer;">Cancel</button>
+    </form>
+
+   <!-- Food Form -->
+<form id="foodForm" action="/donate/food" method="POST" style="display:none; flex-direction:column; gap:12px;">
+  <input type="text" name="name" placeholder="Name" required 
+         style="padding:10px; border-radius:6px; border:1px solid #ccc; font-size:14px;">
+  <input type="text" name="address" placeholder="Address" required 
+         style="padding:10px; border-radius:6px; border:1px solid #ccc; font-size:14px;">
+
+  <!-- Dropdown for Type of Food -->
+  <select name="foodType" required 
+          style="padding:10px; border-radius:6px; border:1px solid #ccc; background:white; font-size:14px;">
+    <option value="" disabled selected>Select Type of Food</option>
+    <option value="Veg">Veg</option>
+    <option value="Non-Veg">Non-Veg</option>
+  </select>
+
+  <!-- Food Item -->
+  <input type="text" name="foodItem" placeholder="Food Item (e.g., Rice, Fruits)" required 
+         style="padding:10px; border-radius:6px; border:1px solid #ccc; font-size:14px;">
+
+  <!-- Quantity -->
+  <input type="number" name="quantity" placeholder="Quantity" required 
+         style="padding:10px; border-radius:6px; border:1px solid #ccc; font-size:14px;">
+
+  <button type="submit" 
+          style="padding:12px; border:none; border-radius:8px; background:#10B981; color:white; font-weight:600; cursor:pointer; font-size:15px;">Donate</button>
+  <button type="button" onclick="closeModal()" 
+          style="padding:12px; border:none; border-radius:8px; background:red; color:white; font-weight:600; cursor:pointer; font-size:15px;">Cancel</button>
+</form>
+
+
+  </div>
+</div>
+
+<script>
+function handleDonate() {
+  <% if (!userData) { %>
+    alert('Please login first to donate!');
+  <% } else { %>
+    document.getElementById('donationModal').style.display = 'flex';
+    document.getElementById('donationTypeSelection').style.display = 'flex';
+    document.getElementById('monetaryForm').style.display = 'none';
+    document.getElementById('foodForm').style.display = 'none';
+    document.getElementById('donationTitle').innerText = 'Choose Donation Type';
+  <% } %>
+}
+
+function showForm(type) {
+  document.getElementById('donationTypeSelection').style.display = 'none';
+  if(type === 'monetary'){
+    document.getElementById('monetaryForm').style.display = 'flex';
+    document.getElementById('foodForm').style.display = 'none';
+    document.getElementById('donationTitle').innerText = 'Monetary Donation';
+  } else {
+    document.getElementById('foodForm').style.display = 'flex';
+    document.getElementById('monetaryForm').style.display = 'none';
+    document.getElementById('donationTitle').innerText = 'Food Donation';
+  }
+}
+
+function closeModal() {
+  document.getElementById('donationModal').style.display = 'none';
+}
+</script>
+
 </body>
 
 <script>
