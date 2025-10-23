@@ -146,6 +146,39 @@
   flex-direction: column;
   gap: 12px;
 }
+
+        /* Registration form improvements */
+        .form-card {
+            background: #fff;
+            padding: 16px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        .form-label {
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+        }
+        .form-input {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .input-with-btn { display:flex; gap:8px; align-items:center; }
+        .icon-btn { background: transparent; border: none; cursor: pointer; font-size: 18px; }
+        .form-actions { display:flex; gap:8px; margin-top:12px; }
+        .secondary-btn { background: transparent; border: 1px solid #d1d5db; padding:10px 12px; border-radius:8px; cursor:pointer; }
 .login-form label {
   font-size: 0.9rem;
   color: #333;
@@ -990,11 +1023,11 @@ background-image: url("../Images/bacground.jpeg");
 }
 
         .footer{
-            
-            
             display: flex;
             justify-content: space-around;
             color: white;
+            background-color: #FF811E; /* requested footer background color */
+            padding: 40px 5%;
         }
         .footer1{
             padding: 50px;
@@ -1009,15 +1042,14 @@ background-image: url("../Images/bacground.jpeg");
             margin-bottom: 10px;
             text-align: center;
             font-weight: 600;
-            color: #131313;
+            color: #ffffff;
             
         }
         .footer1 p{
             font-size: 16px;
-            color: grey;
+            color: #ffffff;
             font-weight: 300;
             line-height: 1.5;
-            
         }
         .footer2{
             padding: 10px ;
@@ -1033,7 +1065,7 @@ background-image: url("../Images/bacground.jpeg");
             margin-bottom: 10px;
             text-align: left;
             font-weight: 600;
-            color: #131313;
+            color: #ffffff;
         }
         .footer2 li ul {
             
@@ -1043,19 +1075,20 @@ background-image: url("../Images/bacground.jpeg");
         .footer2 ul{
             list-style-type:disc;
             text-align: left;
-            color: #000;
-    
+            color: #ffffff;
         }
 
         .footer2 a{
             text-decoration: none;
-            color: grey;
+            color: #ffffff;
             font-size: 16px;
             font-weight: 300;
             line-height: 1.5;
+            opacity: 0.95;
         }
         .footer2 a:hover{
             text-decoration: underline;
+            opacity: 1;
         }
         .footer3{
             
@@ -1073,18 +1106,18 @@ background-image: url("../Images/bacground.jpeg");
             margin-bottom: 2px;
             text-align: left;
             font-weight: 600;
-            color: #131313;
+            color: #ffffff;
         }
         .footer3 p{
             margin: 10px;
             font-size: 16px;
-            color: grey;
+            color: #ffffff;
             font-weight: 300;
             line-height: 1.5;
         }
         .footer3 span{
             padding-right: 4px;
-            color: black;
+            color: #ffffff;
         }
         .links{
             display: flex;
@@ -1140,6 +1173,31 @@ padding: 6px;
 @keyframes scroll {
   0% {transform: translateX(0);}
   100% {transform: translatex(-860%)}
+}
+
+/* NGO logos slider */
+.ngo-slider {
+  width: 100%;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+.ngo-track {
+  display: flex;
+  gap: 3rem;
+  animation: scrollNGO 20s linear infinite;
+}
+
+.ngo-track img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+
+/* Keyframes for smooth scrolling */
+@keyframes scrollNGO {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 
@@ -1338,7 +1396,7 @@ button:hover, .submit-btn:hover {
     href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
     rel="stylesheet"
 />
-<body>
+<body data-user='<%= JSON.stringify(userData || null) %>'>
     <div class="main" id="main">
     <header style="width: 100%; background-color: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: fixed; top: 0; left: 0; z-index: 999;">
   <nav style="display: flex; align-items: center; justify-content: space-between; height: 45px; padding: 0 20px; font-family: Arial, sans-serif; line-height: 1;">
@@ -1357,6 +1415,9 @@ button:hover, .submit-btn:hover {
 <li><a href="#aboutus" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">About us</a></li>
 <li><a href="#services" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">Services</a></li>
 <li><a href="#NGO's" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">NGO's</a></li>
+        <% if (userData && userData.role === 'donor') { %>
+            <li><a href="/donations" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">Donations / Rewards</a></li>
+        <% } %>
 
     </ul>
 
@@ -1433,6 +1494,88 @@ button:hover, .submit-btn:hover {
 
   setInterval(changeImage, 4000); // Change image every 4 seconds
 </script>
+ 
+ <script>
+ // --- Inline toast helpers ---
+ function showToast(message, timeout = 10000) {
+     const toast = document.getElementById('toast');
+     const msg = document.getElementById('toast-msg');
+     if (!toast || !msg) return;
+    msg.textContent = message;
+    // ensure error color (red) for invalid credential popups
+    toast.style.background = '#ef4444';
+    toast.style.display = 'block';
+    toast.style.opacity = '1';
+     setTimeout(() => {
+         toast.style.transition = 'opacity 300ms';
+         toast.style.opacity = '0';
+         setTimeout(() => { toast.style.display = 'none'; toast.style.transition = ''; }, 300);
+     }, timeout);
+ }
+
+ document.addEventListener('DOMContentLoaded', () => {
+     // Intercept login form submission to show inline errors instead of redirecting on failure
+     const loginForm = document.querySelector('#login-tab form.login-form');
+     if (loginForm) {
+         loginForm.addEventListener('submit', async (e) => {
+             e.preventDefault();
+             const formData = new FormData(loginForm);
+             try {
+                 const res = await fetch(loginForm.action || '/login', {
+                     method: loginForm.method || 'POST',
+                     body: formData,
+                     credentials: 'same-origin'
+                 });
+                 const ct = res.headers.get('content-type') || '';
+                 if (res.ok) {
+                     location.reload();
+                     return;
+                 }
+                 if (ct.includes('application/json')) {
+                     const body = await res.json();
+                     showToast(body.message || 'Invalid credentials');
+                 } else {
+                     showToast('Invalid email or password');
+                 }
+             } catch (err) {
+                 showToast('Network error — try again');
+             }
+         });
+     }
+
+     // Intercept donor & NGO register forms to validate and show inline errors
+     const donorForm = document.getElementById('donorForm');
+     const ngoForm = document.getElementById('ngoForm');
+     [donorForm, ngoForm].forEach(form => {
+         if (!form) return;
+         form.addEventListener('submit', async (e) => {
+             e.preventDefault();
+             const formData = new FormData(form);
+             try {
+                 const res = await fetch(form.action || '/registrationUser', {
+                     method: form.method || 'POST',
+                     body: formData,
+                     credentials: 'same-origin'
+                 });
+                 if (res.ok) {
+                     showToast('Registration successful — please login', 2500);
+                     setTimeout(() => { showTab('login'); }, 1200);
+                     return;
+                 }
+                 const ct = res.headers.get('content-type') || '';
+                 if (ct.includes('application/json')) {
+                     const body = await res.json();
+                     showToast(body.message || 'Registration error');
+                 } else {
+                     showToast('Registration failed — check details');
+                 }
+             } catch (err) {
+                 showToast('Network error — try again');
+             }
+         });
+     });
+ });
+ </script>
    
     </section>
 </div>
@@ -1477,17 +1620,22 @@ Once the donation is successfully delivered, we reward your contribution — bec
         </div>
     </section>
 
-   <section class="NGO's" id="NGO's" style="text-align: center; padding: 2rem;">
+  <section class="NGO's" id="NGO's" style="text-align: center; padding: 2rem; overflow: hidden;">
   <h1><span>Our Top Partner NGOs</span></h1>
 
-  <marquee behavior="scroll" direction="left" scrollamount="15" style="margin-top: 2rem;">
-    <div style="display: flex; gap: 3rem;">
-      <img src="/Images/ngo1.png" alt="Feeding India" style="width: 300px; height: 300px; object-fit: contain;">
-      <img src="/Images/ngo2.png" alt="Robin Hood Army" style="width: 300px; height: 300px; object-fit: contain;">
-      <img src="/Images/ngo3.png" alt="Akshaya Patra" style="width: 300px; height: 300px; object-fit: contain;">
-      <img src="/Images/ngo4.png" alt="Goonj" style="width: 300px; height: 300px; object-fit: contain;">
+  <div class="ngo-slider">
+    <div class="ngo-track">
+      <img src="/Images/ngo1.png" alt="Feeding India">
+      <img src="/Images/ngo2.png" alt="Robin Hood Army">
+      <img src="/Images/ngo3.png" alt="Akshaya Patra">
+      <img src="/Images/ngo4.png" alt="Goonj">
+      <!-- Repeat images for smooth infinite loop -->
+      <img src="/Images/ngo1.png" alt="Feeding India">
+      <img src="/Images/ngo2.png" alt="Robin Hood Army">
+      <img src="/Images/ngo3.png" alt="Akshaya Patra">
+      <img src="/Images/ngo4.png" alt="Goonj">
     </div>
-  </marquee>
+  </div>
 </section>
 
 
@@ -1522,33 +1670,147 @@ Once the donation is successfully delivered, we reward your contribution — bec
         <input type="password" name="password" required placeholder="Enter your password">
 
         <button type="submit" class="submit-btn">Login</button>
-      </form>
+            </form>
+
+            <!-- Toast / Inline popup for errors -->
+            <div id="toast" aria-live="polite" style="position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-8px); background:#ef4444; color:white; padding:12px 16px; border-radius:8px; display:none; z-index:10000; box-shadow:0 6px 18px rgba(0,0,0,0.3); max-width:90%;">
+                <span id="toast-msg"></span>
+            </div>
     </div>
 
-    <!-- Register Tab -->
-    <div class="tab-content" id="register-tab" style="display:none;">
-      <h2 class="modal-title">Create Account</h2>
+        <!-- Register Tab -->
+        <div class="tab-content" id="register-tab" style="display:none;">
+            <h2 class="modal-title">Create Account</h2>
 
-      <form class="login-form" action="/registrationUser" method="post">
-        <label>Full Name</label>
-        <input type="text" name="fullname" required placeholder="Your name">
+            <!-- Role choice -->
+            <div id="registerChoice" style="display:flex; gap:12px; justify-content:space-around; margin-top:12px;">
+                <button type="button" onclick="showRegisterForm('donor')" 
+                                style="flex:1; padding:16px; border-radius:10px; border:2px solid #10B981; background:#10B981; color:white; font-weight:700; font-size:16px; cursor:pointer;">Donor</button>
+                <button type="button" onclick="showRegisterForm('ngo')" 
+                                style="flex:1; padding:16px; border-radius:10px; border:2px solid #0694C3; background:#0694C3; color:white; font-weight:700; font-size:16px; cursor:pointer;">NGO</button>
+            </div>
 
-        <label>Email</label>
-        <input type="email"  name="email" required placeholder="you@example.com">
+            <!-- Donor Form -->
+            <form id="donorForm" class="login-form form-card" action="/registrationUser" method="post" style="display:none; margin-top:12px;" onsubmit="return validateDonorForm()">
+                <input type="hidden" name="role" value="donor">
+                <div class="form-row">
+                    <label class="form-label" for="donor-fullname">Name</label>
+                    <input id="donor-fullname" class="form-input" type="text" name="fullname" required placeholder="Your name">
+                </div>
 
-        <label>Password</label>
-        <input type="password" name="password" required placeholder="Create a password">
+                <div class="form-row">
+                    <label class="form-label" for="donor-email">Email</label>
+                    <input id="donor-email" class="form-input" type="email" name="email" required placeholder="you@example.com">
+                </div>
 
-        <label>Register As</label>
-        <select required name="role">
-          <option value="">Select type</option>
-          <option value="donor">Donor</option>
-          <option value="ngo">NGO</option>
-        </select>
+                <div class="form-row">
+                    <label class="form-label" for="donor-password">Password</label>
+                    <div class="input-with-btn">
+                        <input id="donor-password" class="form-input" type="password" name="password" required placeholder="Create a password">
+                        <button type="button" class="icon-btn" onclick="togglePassword('donor-password', this)">👁️</button>
+                    </div>
+                </div>
 
-        <button type="submit" class="submit-btn">Register</button>
-      </form>
-    </div>
+                <div class="form-row">
+                    <label class="form-label" for="donor-confirm">Confirm Password</label>
+                    <div class="input-with-btn">
+                        <input id="donor-confirm" class="form-input" type="password" name="confirmPassword" required placeholder="Confirm password">
+                        <button type="button" class="icon-btn" onclick="togglePassword('donor-confirm', this)">👁️</button>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Register as Donor</button>
+                    <button type="button" onclick="backToChoice()" class="secondary-btn">Back</button>
+                </div>
+            </form>
+
+            <!-- NGO Form -->
+            <form id="ngoForm" class="login-form form-card" action="/registrationUser" method="post" style="display:none; margin-top:12px;" onsubmit="return validateNgoForm()">
+                <input type="hidden" name="role" value="ngo">
+                <div class="form-row">
+                    <label class="form-label" for="ngo-fullname">Name</label>
+                    <input id="ngo-fullname" class="form-input" type="text" name="fullname" required placeholder="Organization / Contact name">
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label" for="ngo-email">Email</label>
+                    <input id="ngo-email" class="form-input" type="email" name="email" required placeholder="you@example.com">
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label" for="ngo-password">Password</label>
+                    <div class="input-with-btn">
+                        <input id="ngo-password" class="form-input" type="password" name="password" required placeholder="Create a password">
+                        <button type="button" class="icon-btn" onclick="togglePassword('ngo-password', this)">👁️</button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label" for="ngo-confirm">Confirm Password</label>
+                    <div class="input-with-btn">
+                        <input id="ngo-confirm" class="form-input" type="password" name="confirmPassword" required placeholder="Confirm password">
+                        <button type="button" class="icon-btn" onclick="togglePassword('ngo-confirm', this)">👁️</button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label" for="ngo-phone">Phone number</label>
+                    <input id="ngo-phone" class="form-input" type="tel" name="phone" placeholder="Phone number" pattern="[0-9]{10}">
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label" for="ngo-pan">PAN ID</label>
+                    <input id="ngo-pan" class="form-input" type="text" name="pan" placeholder="PAN ID">
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label" for="ngo-darpan">Darpan ID</label>
+                    <input id="ngo-darpan" class="form-input" type="text" name="darpan" placeholder="Darpan ID">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Register as NGO</button>
+                    <button type="button" onclick="backToChoice()" class="secondary-btn">Back</button>
+                </div>
+            </form>
+
+            <script>
+                function showRegisterForm(type) {
+                    document.getElementById('registerChoice').style.display = 'none';
+                    if (type === 'donor') {
+                        document.getElementById('donorForm').style.display = 'block';
+                        document.getElementById('ngoForm').style.display = 'none';
+                    } else {
+                        document.getElementById('ngoForm').style.display = 'block';
+                        document.getElementById('donorForm').style.display = 'none';
+                    }
+                }
+                function backToChoice() {
+                    document.getElementById('registerChoice').style.display = 'flex';
+                    document.getElementById('donorForm').style.display = 'none';
+                    document.getElementById('ngoForm').style.display = 'none';
+                }
+                function togglePassword(fieldId, btn) {
+                    const f = document.getElementById(fieldId);
+                    if (!f) return;
+                    if (f.type === 'password') { f.type = 'text'; btn.textContent = '🙈'; }
+                    else { f.type = 'password'; btn.textContent = '👁️'; }
+                }
+                function validateDonorForm() {
+                    const p = document.getElementById('donor-password');
+                    const c = document.getElementById('donor-confirm');
+                    if (p && c && p.value !== c.value) { alert('Passwords do not match'); return false; }
+                    return true;
+                }
+                function validateNgoForm() {
+                    const p = document.getElementById('ngo-password');
+                    const c = document.getElementById('ngo-confirm');
+                    if (p && c && p.value !== c.value) { alert('Passwords do not match'); return false; }
+                    return true;
+                }
+            </script>
+        </div>
   </div>
 </div>
 
@@ -1719,6 +1981,8 @@ Once the donation is successfully delivered, we reward your contribution — bec
          style="padding:10px; border-radius:6px; border:1px solid #ccc; font-size:14px;">
   <input type="text" name="address" placeholder="Address" required 
          style="padding:10px; border-radius:6px; border:1px solid #ccc; font-size:14px;">
+  <input type="tel" name="phone" placeholder="Phone number (10 digits)" pattern="[0-9]{10}" required
+      style="padding:10px; border-radius:6px; border:1px solid #ccc; font-size:14px;">
 
   <!-- Dropdown for Type of Food -->
   <select name="foodType" required 
@@ -1743,37 +2007,57 @@ Once the donation is successfully delivered, we reward your contribution — bec
 </form>
 
 
-  </div>
+</div>
 </div>
 
 <script>
+// Read server-provided user info from body data attribute
+let __userData = null;
+try { __userData = JSON.parse(document.body.getAttribute('data-user')); } catch(e) { __userData = null; }
+const isLoggedIn = !!__userData;
+const currentUserRole = __userData ? __userData.role : null;
+
 function handleDonate() {
-  <% if (!userData) { %>
-    alert('Please login first to donate!');
-  <% } else { %>
-    document.getElementById('donationModal').style.display = 'flex';
-    document.getElementById('donationTypeSelection').style.display = 'flex';
-    document.getElementById('monetaryForm').style.display = 'none';
-    document.getElementById('foodForm').style.display = 'none';
-    document.getElementById('donationTitle').innerText = 'Choose Donation Type';
-  <% } %>
+    if (!isLoggedIn) {
+        alert('Please login first to donate!');
+        if (typeof openLoginModal === 'function') openLoginModal();
+        return;
+    }
+
+    const modal = document.getElementById('donationModal');
+    const sel = document.getElementById('donationTypeSelection');
+    const monetaryForm = document.getElementById('monetaryForm');
+    const foodForm = document.getElementById('foodForm');
+    const title = document.getElementById('donationTitle');
+
+    if (!modal) return;
+    modal.style.display = 'flex';
+    if (sel) sel.style.display = 'flex';
+    if (monetaryForm) monetaryForm.style.display = 'none';
+    if (foodForm) foodForm.style.display = 'none';
+    if (title) title.innerText = 'Choose Donation Type';
 }
 
 function showForm(type) {
-  document.getElementById('donationTypeSelection').style.display = 'none';
-  if(type === 'monetary'){
-    document.getElementById('monetaryForm').style.display = 'flex';
-    document.getElementById('foodForm').style.display = 'none';
-    document.getElementById('donationTitle').innerText = 'Monetary Donation';
-  } else {
-    document.getElementById('foodForm').style.display = 'flex';
-    document.getElementById('monetaryForm').style.display = 'none';
-    document.getElementById('donationTitle').innerText = 'Food Donation';
-  }
+    const sel = document.getElementById('donationTypeSelection');
+    const monetaryForm = document.getElementById('monetaryForm');
+    const foodForm = document.getElementById('foodForm');
+    const title = document.getElementById('donationTitle');
+    if (sel) sel.style.display = 'none';
+    if (type === 'monetary') {
+        if (monetaryForm) monetaryForm.style.display = 'flex';
+        if (foodForm) foodForm.style.display = 'none';
+        if (title) title.innerText = 'Monetary Donation';
+    } else {
+        if (foodForm) foodForm.style.display = 'flex';
+        if (monetaryForm) monetaryForm.style.display = 'none';
+        if (title) title.innerText = 'Food Donation';
+    }
 }
 
 function closeModal() {
-  document.getElementById('donationModal').style.display = 'none';
+    const modal = document.getElementById('donationModal');
+    if (modal) modal.style.display = 'none';
 }
 </script>
 
