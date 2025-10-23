@@ -1418,7 +1418,9 @@ button:hover, .submit-btn:hover {
         <% if (userData && userData.role === 'donor') { %>
             <li><a href="/donations" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">Donations / Rewards</a></li>
         <% } %>
-
+          <% if (userData && userData.role === 'ngo') { %>
+            <li><a href="/donationsNGO" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">Donations</a></li>
+        <% } %>
     </ul>
 
     <!-- Login/Register (Right) -->
@@ -1519,24 +1521,34 @@ button:hover, .submit-btn:hover {
      if (loginForm) {
          loginForm.addEventListener('submit', async (e) => {
              e.preventDefault();
-             const formData = new FormData(loginForm);
+             // build URL-encoded body so express.urlencoded can parse it
+             const fd = new FormData(loginForm);
+             const params = new URLSearchParams();
+             for (const [k, v] of fd.entries()) params.append(k, v);
              try {
                  const res = await fetch(loginForm.action || '/login', {
                      method: loginForm.method || 'POST',
-                     body: formData,
+                     headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                     body: params.toString(),
                      credentials: 'same-origin'
                  });
-                 const ct = res.headers.get('content-type') || '';
-                 if (res.ok) {
-                     location.reload();
-                     return;
-                 }
-                 if (ct.includes('application/json')) {
-                     const body = await res.json();
-                     showToast(body.message || 'Invalid credentials');
-                 } else {
-                     showToast('Invalid email or password');
-                 }
+                const ct = res.headers.get('content-type') || '';
+                if (ct.includes('application/json')) {
+                    const body = await res.json();
+                    if (res.ok && body.redirect) {
+                        // login successful
+                        window.location.href = body.redirect;
+                        return;
+                    }
+                    showToast(body.message || 'Invalid credentials');
+                    return;
+                }
+                if (res.ok) {
+                    // non-json success — fallback reload
+                    location.reload();
+                    return;
+                }
+                showToast('Invalid email or password');
              } catch (err) {
                  showToast('Network error — try again');
              }
@@ -1548,27 +1560,34 @@ button:hover, .submit-btn:hover {
      const ngoForm = document.getElementById('ngoForm');
      [donorForm, ngoForm].forEach(form => {
          if (!form) return;
-         form.addEventListener('submit', async (e) => {
-             e.preventDefault();
-             const formData = new FormData(form);
-             try {
-                 const res = await fetch(form.action || '/registrationUser', {
-                     method: form.method || 'POST',
-                     body: formData,
-                     credentials: 'same-origin'
-                 });
-                 if (res.ok) {
-                     showToast('Registration successful — please login', 2500);
-                     setTimeout(() => { showTab('login'); }, 1200);
-                     return;
-                 }
-                 const ct = res.headers.get('content-type') || '';
-                 if (ct.includes('application/json')) {
-                     const body = await res.json();
-                     showToast(body.message || 'Registration error');
-                 } else {
-                     showToast('Registration failed — check details');
-                 }
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fd = new FormData(form);
+            const params = new URLSearchParams();
+            for (const [k, v] of fd.entries()) params.append(k, v);
+            try {
+                const res = await fetch(form.action || '/registrationUser', {
+                    method: form.method || 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                    body: params.toString(),
+                    credentials: 'same-origin'
+                });
+                const ct = res.headers.get('content-type') || '';
+                if (ct.includes('application/json')) {
+                    const body = await res.json();
+                    if (res.ok && body.redirect) {
+                        window.location.href = body.redirect;
+                        return;
+                    }
+                    showToast(body.message || 'Registration error');
+                    return;
+                }
+                if (res.ok) {
+                    showToast('Registration successful — please login', 2500);
+                    setTimeout(() => { showTab('login'); }, 1200);
+                    return;
+                }
+                showToast('Registration failed — check details');
              } catch (err) {
                  showToast('Network error — try again');
              }
@@ -1693,89 +1712,247 @@ Once the donation is successfully delivered, we reward your contribution — bec
             <!-- Donor Form -->
             <form id="donorForm" class="login-form form-card" action="/registrationUser" method="post" style="display:none; margin-top:12px;" onsubmit="return validateDonorForm()">
                 <input type="hidden" name="role" value="donor">
-                <div class="form-row">
-                    <label class="form-label" for="donor-fullname">Name</label>
-                    <input id="donor-fullname" class="form-input" type="text" name="fullname" required placeholder="Your name">
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="donor-fullname" style="color: #4B5563;">
+                        <i class="ri-user-line" style="margin-right: 8px;"></i>Name
+                    </label>
+                    <input id="donor-fullname" class="form-input" type="text" name="fullname" required 
+                           placeholder="Your name" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-user-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
                 </div>
 
-                <div class="form-row">
-                    <label class="form-label" for="donor-email">Email</label>
-                    <input id="donor-email" class="form-input" type="email" name="email" required placeholder="you@example.com">
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="donor-email" style="color: #4B5563;">
+                        <i class="ri-mail-line" style="margin-right: 8px;"></i>Email
+                    </label>
+                    <input id="donor-email" class="form-input" type="email" name="email" required 
+                           placeholder="you@example.com" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-mail-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
                 </div>
 
-                <div class="form-row">
-                    <label class="form-label" for="donor-password">Password</label>
-                    <div class="input-with-btn">
-                        <input id="donor-password" class="form-input" type="password" name="password" required placeholder="Create a password">
-                        <button type="button" class="icon-btn" onclick="togglePassword('donor-password', this)">👁️</button>
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="donor-password" style="color: #4B5563;">
+                        <i class="ri-lock-line" style="margin-right: 8px;"></i>Password
+                    </label>
+                    <div class="input-with-btn" style="position: relative;">
+                        <input id="donor-password" class="form-input" type="password" name="password" required 
+                               placeholder="Create a password" style="padding-left: 40px; padding-right: 40px; transition: all 0.3s ease;">
+                        <i class="ri-lock-line" style="position: absolute; left: 12px; top: 12px; color: #9CA3AF;"></i>
+                        <button type="button" class="icon-btn password-toggle" onclick="togglePassword('donor-password', this)"
+                                aria-label="Toggle password visibility">
+                            <i class="ri-eye-off-line"></i>
+                        </button>
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <label class="form-label" for="donor-confirm">Confirm Password</label>
-                    <div class="input-with-btn">
-                        <input id="donor-confirm" class="form-input" type="password" name="confirmPassword" required placeholder="Confirm password">
-                        <button type="button" class="icon-btn" onclick="togglePassword('donor-confirm', this)">👁️</button>
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="donor-confirm" style="color: #4B5563;">
+                        <i class="ri-checkbox-circle-line" style="margin-right: 8px;"></i>Confirm Password
+                    </label>
+                    <div class="input-with-btn" style="position: relative;">
+                        <input id="donor-confirm" class="form-input" type="password" name="confirmPassword" required 
+                               placeholder="Confirm password" style="padding-left: 40px; padding-right: 40px; transition: all 0.3s ease;">
+                        <i class="ri-checkbox-circle-line" style="position: absolute; left: 12px; top: 12px; color: #9CA3AF;"></i>
+                        <button type="button" class="icon-btn password-toggle" onclick="togglePassword('donor-confirm', this)"
+                                aria-label="Toggle password visibility">
+                            <i class="ri-eye-off-line"></i>
+                        </button>
                     </div>
                 </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="submit-btn">Register as Donor</button>
-                    <button type="button" onclick="backToChoice()" class="secondary-btn">Back</button>
+                <div class="form-actions" style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="submit-btn" 
+                            style="flex: 2; background: #0694C3; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">
+                        <i class="ri-user-add-line" style="margin-right: 8px;"></i>Register as Donor
+                    </button>
+                    <button type="button" onclick="backToChoice()" class="secondary-btn"
+                            style="flex: 1; background: #F3F4F6; color: #4B5563; border: 1px solid #E5E7EB; padding: 12px; border-radius: 8px; font-weight: 500; transition: all 0.3s ease;">
+                        Back
+                    </button>
                 </div>
             </form>
 
             <!-- NGO Form -->
             <form id="ngoForm" class="login-form form-card" action="/registrationUser" method="post" style="display:none; margin-top:12px;" onsubmit="return validateNgoForm()">
                 <input type="hidden" name="role" value="ngo">
-                <div class="form-row">
-                    <label class="form-label" for="ngo-fullname">Name</label>
-                    <input id="ngo-fullname" class="form-input" type="text" name="fullname" required placeholder="Organization / Contact name">
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-fullname" style="color: #4B5563;">
+                        <i class="ri-building-line" style="margin-right: 8px;"></i>Organization Name
+                    </label>
+                    <input id="ngo-fullname" class="form-input" type="text" name="fullname" required 
+                           placeholder="Organization / Contact name" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-building-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
                 </div>
 
-                <div class="form-row">
-                    <label class="form-label" for="ngo-email">Email</label>
-                    <input id="ngo-email" class="form-input" type="email" name="email" required placeholder="you@example.com">
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-email" style="color: #4B5563;">
+                        <i class="ri-mail-line" style="margin-right: 8px;"></i>Email
+                    </label>
+                    <input id="ngo-email" class="form-input" type="email" name="email" required 
+                           placeholder="organization@example.com" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-mail-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
                 </div>
 
-                <div class="form-row">
-                    <label class="form-label" for="ngo-password">Password</label>
-                    <div class="input-with-btn">
-                        <input id="ngo-password" class="form-input" type="password" name="password" required placeholder="Create a password">
-                        <button type="button" class="icon-btn" onclick="togglePassword('ngo-password', this)">👁️</button>
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-password" style="color: #4B5563;">
+                        <i class="ri-lock-line" style="margin-right: 8px;"></i>Password
+                    </label>
+                    <div class="input-with-btn" style="position: relative;">
+                        <input id="ngo-password" class="form-input" type="password" name="password" required 
+                               placeholder="Create a password" style="padding-left: 40px; padding-right: 40px; transition: all 0.3s ease;">
+                        <i class="ri-lock-line" style="position: absolute; left: 12px; top: 12px; color: #9CA3AF;"></i>
+                        <button type="button" class="icon-btn password-toggle" onclick="togglePassword('ngo-password', this)"
+                                aria-label="Toggle password visibility">
+                            <i class="ri-eye-off-line"></i>
+                        </button>
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <label class="form-label" for="ngo-confirm">Confirm Password</label>
-                    <div class="input-with-btn">
-                        <input id="ngo-confirm" class="form-input" type="password" name="confirmPassword" required placeholder="Confirm password">
-                        <button type="button" class="icon-btn" onclick="togglePassword('ngo-confirm', this)">👁️</button>
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-confirm" style="color: #4B5563;">
+                        <i class="ri-checkbox-circle-line" style="margin-right: 8px;"></i>Confirm Password
+                    </label>
+                    <div class="input-with-btn" style="position: relative;">
+                        <input id="ngo-confirm" class="form-input" type="password" name="confirmPassword" required 
+                               placeholder="Confirm password" style="padding-left: 40px; padding-right: 40px; transition: all 0.3s ease;">
+                        <i class="ri-checkbox-circle-line" style="position: absolute; left: 12px; top: 12px; color: #9CA3AF;"></i>
+                        <button type="button" class="icon-btn password-toggle" onclick="togglePassword('ngo-confirm', this)"
+                                aria-label="Toggle password visibility">
+                            <i class="ri-eye-off-line"></i>
+                        </button>
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <label class="form-label" for="ngo-phone">Phone number</label>
-                    <input id="ngo-phone" class="form-input" type="tel" name="phone" placeholder="Phone number" pattern="[0-9]{10}">
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-phone" style="color: #4B5563;">
+                        <i class="ri-phone-line" style="margin-right: 8px;"></i>Phone Number
+                    </label>
+                    <input id="ngo-phone" class="form-input" type="tel" name="phone" required
+                           placeholder="Your phone number" pattern="[0-9]{10}" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-phone-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
                 </div>
 
-                <div class="form-row">
-                    <label class="form-label" for="ngo-pan">PAN ID</label>
-                    <input id="ngo-pan" class="form-input" type="text" name="pan" placeholder="PAN ID">
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-pan" style="color: #4B5563;">
+                        <i class="ri-profile-line" style="margin-right: 8px;"></i>PAN ID
+                    </label>
+                    <input id="ngo-pan" class="form-input" type="text" name="pan" required
+                           placeholder="Enter PAN ID" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-profile-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
                 </div>
 
-                <div class="form-row">
-                    <label class="form-label" for="ngo-darpan">Darpan ID</label>
-                    <input id="ngo-darpan" class="form-input" type="text" name="darpan" placeholder="Darpan ID">
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-darpan" style="color: #4B5563;">
+                        <i class="ri-government-line" style="margin-right: 8px;"></i>Darpan ID
+                    </label>
+                    <input id="ngo-darpan" class="form-input" type="text" name="darpan" required
+                           placeholder="Enter Darpan ID" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-government-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
                 </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="submit-btn">Register as NGO</button>
-                    <button type="button" onclick="backToChoice()" class="secondary-btn">Back</button>
+                <div class="form-actions" style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="submit-btn" 
+                            style="flex: 2; background: #0694C3; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">
+                        <i class="ri-building-2-line" style="margin-right: 8px;"></i>Register as NGO
+                    </button>
+                    <button type="button" onclick="backToChoice()" class="secondary-btn"
+                            style="flex: 1; background: #F3F4F6; color: #4B5563; border: 1px solid #E5E7EB; padding: 12px; border-radius: 8px; font-weight: 500; transition: all 0.3s ease;">
+                        Back
+                    </button>
                 </div>
             </form>
 
+            <style>
+            .form-input:focus {
+                border-color: #0694C3;
+                box-shadow: 0 0 0 2px rgba(6, 148, 195, 0.1);
+                outline: none;
+            }
+            
+            .form-row {
+                margin-bottom: 16px;
+            }
+
+            .form-label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                font-size: 0.9rem;
+            }
+
+            .submit-btn:hover {
+                background: #0576A0 !important;
+                transform: translateY(-1px);
+            }
+
+            .secondary-btn:hover {
+                background: #E5E7EB !important;
+            }
+
+            .input-with-btn .icon-btn {
+                position: absolute;
+                right: 8px;
+                top: 8px;
+                background: none;
+                border: none;
+                padding: 4px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+            }
+
+            .input-with-btn .icon-btn:hover {
+                background-color: rgba(6, 148, 195, 0.1);
+                color: #0694C3 !important;
+            }
+
+            .input-with-btn .icon-btn i {
+                font-size: 1.2rem;
+                transition: all 0.2s ease;
+            }
+
+            .password-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 24px;
+                height: 24px;
+            }
+
+            .password-toggle i {
+                color: #9CA3AF;
+                font-size: 1.2rem;
+            }
+
+            .password-toggle:hover i {
+                color: #0694C3;
+            }
+            </style>
+
             <script>
+            function togglePassword(fieldId, btn) {
+                const field = document.getElementById(fieldId);
+                const icon = btn.querySelector('i');
+                
+                if (field.type === 'password') {
+                    field.type = 'text';
+                    icon.classList.remove('ri-eye-off-line');
+                    icon.classList.add('ri-eye-line');
+                } else {
+                    field.type = 'password';
+                    icon.classList.remove('ri-eye-line');
+                    icon.classList.add('ri-eye-off-line');
+                }
+
+                // Add subtle animation
+                icon.style.transform = 'scale(0.8)';
+                setTimeout(() => {
+                    icon.style.transform = 'scale(1)';
+                }, 100);
+            }
                 function showRegisterForm(type) {
                     document.getElementById('registerChoice').style.display = 'none';
                     if (type === 'donor') {
@@ -1873,7 +2050,7 @@ Once the donation is successfully delivered, we reward your contribution — bec
             <p></p>
             <p><span><i class="ri-map-pin-fill"></i></span>A.S.Rao Nagar,Old safilguda,Secundrabad</p>
             <p><span><i class="ri-phone-fill"></i></span>9542538773</p>
-            <p><span><i class="ri-mail-fill"></i></span>foodbridge@gmail.com</p>
+            <p><span><i class="ri-mail-fill"></i></span>Info.FoodBridge.co@gmail.com</p>
 
         </div>
     </footer>

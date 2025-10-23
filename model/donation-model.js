@@ -8,7 +8,10 @@ const donationSchema = new mongoose.Schema({
   phone: { type: String },
   quantity: { type: Number },
   address: { type: String },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  status: { type: String, enum: ['available', 'accepted', 'completed'], default: 'available' },
+  acceptedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  acceptedAt: { type: Date }
 });
 
 module.exports = mongoose.model('Donation', donationSchema);
