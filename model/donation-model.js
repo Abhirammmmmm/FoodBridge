@@ -1,0 +1,17 @@
+const mongoose = require('mongoose');
+
+const donationSchema = new mongoose.Schema({
+  donor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  type: { type: String, enum: ['monetary', 'food'], required: true },
+  amount: { type: Number },
+  foodItem: { type: String },
+  phone: { type: String },
+  quantity: { type: Number },
+  address: { type: String },
+  createdAt: { type: Date, default: Date.now },
+  status: { type: String, enum: ['available', 'accepted', 'completed'], default: 'available' },
+  acceptedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  acceptedAt: { type: Date }
+});
+
+module.exports = mongoose.model('Donation', donationSchema);

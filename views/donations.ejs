@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Your Donations & Rewards</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body{ font-family: Poppins, Arial; padding: 24px; }
+    .container{ max-width:900px; margin:0 auto; }
+    h1{ color:#0b5; }
+    .card{ background:#fff; border-radius:8px; padding:16px; box-shadow:0 6px 18px rgba(0,0,0,0.06); margin-bottom:12px; }
+    .muted{ color:#666; font-size:14px }
+    .rewards{ background:linear-gradient(90deg,#10B981,#0694C3); color:white; padding:12px; border-radius:8px; text-align:center }
+  </style>
+</head>
+  <body data-points="<%= totalPoints %>" data-redeemed="<%= (coupons ? coupons.length : 0) %>">
+  <div class="container">
+    <a href="/" style="text-decoration:none;color:#0694C3">← Back to home</a>
+    <h1>Your Donations</h1>
+
+    <% if (!donations || donations.length === 0) { %>
+      <div class="card">You have not made any donations yet.</div>
+    <% } else { %>
+      <% donations.forEach(d => { %>
+        <div class="card">
+          <div><strong><%= d.type === 'monetary' ? 'Monetary' : 'Food' %> donation</strong> — <span class="muted"><%= new Date(d.createdAt).toLocaleString() %></span></div>
+          <% if (d.type === 'monetary') { %>
+            <div>Amount: ₹<%= d.amount %></div>
+          <% } else { %>
+            <div>Item: <%= d.foodItem %> (Qty: <%= d.quantity %>)</div>
+            <% if (d.phone) { %>
+              <div>Phone: <%= d.phone %></div>
+            <% } %>
+          <% } %>
+          <div class="muted">Address: <%= d.address %></div>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <h2>Rewards</h2>
+    <div class="card rewards">
+      <% /* Simple rewards calculation: 1 point per ₹100 or 1 point per food donation */ %>
+      <% const moneyPoints = donations.filter(d=>d.type==='monetary').reduce((s,d)=>s + (d.amount?Math.floor(d.amount/100):0),0); %>
+      <% const foodPoints = donations.filter(d=>d.type==='food').length; %>
+      <div id="pointsTotal" style="font-size:20px; font-weight:700">Total Points: <%= moneyPoints + foodPoints %></div>
+      <div class="muted">(Points: ₹100 -> 1 point; each food donation -> 1 point)</div>
+    </div>
+
+    <!-- Partner restaurants & redeem UI -->
+    <h2 style="margin-top:18px">Redeem Coupons</h2>
+    <div class="card" id="redeemCard">
+      <p class="muted">Select restaurants to redeem coupons with your points. 1 point = 1 coupon.</p>
+
+      <div id="restaurantsList">
+        <!-- Populated client-side: each restaurant has a Redeem 1 coupon button -->
+      </div>
+
+      <div style="margin-top:12px; display:flex; gap:12px; align-items:center;">
+        <div id="remainingPoints" class="muted">Remaining points: <span id="remainingCount"><%= totalPoints %></span></div>
+      </div>
+
+  <div id="redeemResult" style="margin-top:12px;"></div>
+
+      <!-- Simple modal for coupon code -->
+      <div id="couponModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
+        <div style="background:white; padding:18px; border-radius:10px; max-width:420px; width:90%; text-align:center;">
+          <h3 style="margin-top:0">Coupon Redeemed</h3>
+          <div id="couponContent" style="font-size:18px; font-weight:700; margin:8px 0;">CODE</div>
+          <div id="couponRest" class="muted" style="margin-bottom:12px;"></div>
+          <button onclick="closeCouponModal()" style="padding:8px 12px; background:#10B981; color:white; border:none; border-radius:8px;">Close</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Redeemed coupons history -->
+  <div class="container" style="margin-top:18px;">
+    <h2>Redeemed Coupons History</h2>
+    <% if (!coupons || coupons.length === 0) { %>
+      <div class="card">You have not redeemed any coupons yet.</div>
+    <% } else { %>
+      <div class="card">
+        <ul id="couponHistory">
+          <% coupons.forEach(c => { %>
+            <li><strong><%= c.code %></strong> — <%= c.restaurantName %> <span class="muted">(<%= new Date(c.issuedAt).toLocaleString() %>)</span></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+  </div>
+
+  <script>
+    // Simple list of partner restaurants (could be fetched from server later)
+    const partnerRestaurants = [
+      { id: 'rest1', name: 'Green Garden' },
+      { id: 'rest2', name: 'Spice Route' },
+      { id: 'rest3', name: 'Urban Bites' },
+      { id: 'rest4', name: 'Cafe Delight' },
+      { id: 'rest5', name: 'Mama Mia Pizzeria' }
+    ];
+
+  const totalPoints = Number(document.body.getAttribute('data-points') || 0);
+  const redeemedCount = Number(document.body.getAttribute('data-redeemed') || 0);
+  let remaining = Math.max(0, totalPoints - redeemedCount);
+
+    const restaurantsList = document.getElementById('restaurantsList');
+    const remainingCount = document.getElementById('remainingCount');
+    const redeemResult = document.getElementById('redeemResult');
+
+    function generateCode() {
+      // Generate a fake coupon code like FB-8A1B2C3D
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let part = '';
+      for (let i=0;i<8;i++) part += chars.charAt(Math.floor(Math.random()*chars.length));
+      return 'FB-' + part;
+    }
+
+    function renderRestaurants() {
+      restaurantsList.innerHTML = '';
+      partnerRestaurants.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.style.display = 'flex';
+        div.style.justifyContent = 'space-between';
+        div.style.alignItems = 'center';
+        div.innerHTML = `
+          <div>
+            <strong>${r.name}</strong>
+            <div class="muted">Redeem 1 coupon redeemable at ${r.name}</div>
+          </div>
+          <div>
+            <button class="redeemBtn" data-id="${r.id}" data-name="${r.name}" style="padding:8px 12px; background:#0694C3; color:white; border:none; border-radius:8px; cursor:pointer;">Redeem 1 coupon</button>
+          </div>
+        `;
+        restaurantsList.appendChild(div);
+      });
+
+      // attach handlers
+      document.querySelectorAll('.redeemBtn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const id = btn.getAttribute('data-id');
+          const name = btn.getAttribute('data-name');
+          if (remaining < 1) {
+            redeemResult.innerHTML = '<div style="color:crimson">Not enough points to redeem. Earn more points to get coupons.</div>';
+            return;
+          }
+          // call server to create coupon
+          try {
+            const res = await fetch('/redeem', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ restaurantId: id, restaurantName: name })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Redeem failed');
+            // success: use server-provided remaining and show modal with server code
+            remaining = Number(data.remaining);
+            remainingCount.textContent = remaining;
+            const couponContent = document.getElementById('couponContent');
+            const couponRest = document.getElementById('couponRest');
+            couponContent.textContent = data.code;
+            couponRest.textContent = `Valid at: ${data.restaurantName}`;
+            document.getElementById('couponModal').style.display = 'flex';
+            redeemResult.innerHTML = `<div style="padding:10px; border-radius:8px; background:#eef;">Successfully redeemed 1 coupon for <strong>${name}</strong>. Code: <strong>${data.code}</strong></div>`;
+            // append to coupon history list if present
+            const history = document.getElementById('couponHistory');
+            if (history) {
+              const li = document.createElement('li');
+              li.innerHTML = `${data.code} — ${name} <span class="muted">(just now)</span>`;
+              history.prepend(li);
+            }
+          } catch (err) {
+            redeemResult.innerHTML = `<div style="color:crimson">${err.message}</div>`;
+          }
+        });
+      });
+    }
+
+    function closeCouponModal() {
+      const m = document.getElementById('couponModal');
+      if (m) m.style.display = 'none';
+    }
+
+    // Initialize
+    renderRestaurants();
+  </script>
+  </div>
+</body>
+</html>

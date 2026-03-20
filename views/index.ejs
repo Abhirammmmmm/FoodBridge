@@ -1,0 +1,2438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodBridge</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html {
+    scroll-behavior: smooth;
+}
+      body {
+        
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            
+            overflow-x: hidden;
+            
+        }
+        header {
+            background: transparent;
+            padding: 20px 40px;
+        }
+        nav {
+            display: flex;
+            justify-content:start;
+            gap: 200px;
+            align-items: center;
+   
+            
+        }
+ /* login  */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  position: relative;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #aaa;
+}
+.close:hover {
+  color: #333;
+}
+
+.modal-title {
+  text-align: center;
+  margin-bottom: 1.2rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Tabs */
+.tab-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: #666;
+}
+.tab-btn.active {
+  border-bottom: 2px solid #007bff;
+  color: #007bff;
+}
+
+/* Google Login */
+.google-login-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+  border-radius: 6px;
+  width: 100%;
+  cursor: pointer;
+  font-weight: 500;
+}
+.google-login-btn img {
+  height: 20px;
+  width: 20px;
+}
+.google-login-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.divider {
+  text-align: center;
+  margin: 1.2rem 0;
+  position: relative;
+}
+.divider span {
+  background: #fff;
+  padding: 0 12px;
+  position: relative;
+  z-index: 1;
+  color: #999;
+  font-size: 0.85rem;
+}
+.divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: #ccc;
+  left: 0;
+  z-index: 0;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+        /* Registration form improvements */
+        .form-card {
+            background: #fff;
+            padding: 16px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        .form-label {
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+        }
+        .form-input {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .input-with-btn { display:flex; gap:8px; align-items:center; }
+        .icon-btn { background: transparent; border: none; cursor: pointer; font-size: 18px; }
+        .form-actions { display:flex; gap:8px; margin-top:12px; }
+        .secondary-btn { background: transparent; border: 1px solid #d1d5db; padding:10px 12px; border-radius:8px; cursor:pointer; }
+.login-form label {
+  font-size: 0.9rem;
+  color: #333;
+}
+.login-form input,
+.login-form select {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+.login-form input:focus,
+.login-form select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.submit-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+
+
+ /* === */
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #000000;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: black;
+            font-weight: 550;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color:#0694C3
+        }
+        .contact-btn {
+            background: white;
+            color: #0694C3;
+            border: 2px solid #0694C3;
+            padding: 12px 24px;
+            border-radius: 15px;
+            width: 125px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .contact-btn:hover {
+            background: #0694C3;
+            color: white;
+        }
+
+
+
+
+.main{
+    background-image: url("../Images/bacground.jpeg");
+}
+
+        .hero {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 50px 10%;
+            padding-right: 4%;
+           
+        }
+        .hero-content {
+            flex: 1;
+            width: 50%;
+            display: flex;
+            gap: 1px;
+            flex-direction: column;
+        }
+        
+        .hero-image img {
+            animation: slideIn 1.5s ease-in-out;
+        }
+        .hero-content h1 {
+            font-size: 40px;
+            color: #0694C3;
+            padding-left: 1px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            
+        }
+        .hero-content span {
+            font-size: 40px;
+            color: white;
+            padding-left: 1px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            
+        }
+        .hero-content p {
+            color: white;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+/* mobile version of hero section  */
+/* Existing CSS remains unchanged */
+
+@media (max-width: 1024px) {
+    /* Tablet view adjustments */
+    header {
+        padding: 15px 30px;
+    }
+    nav ul {
+        gap: 20px;
+    }
+    nav ul li a {
+        font-size: 16px;
+    }
+    .contact-btn {
+        padding: 10px 20px;
+        width: auto;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 5%;
+    }
+    .hero-content {
+        width: 100%;
+    }
+    .hero-content h1 {
+        font-size: 32px;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 450px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile view adjustments */
+    nav {
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+    .logo img {
+        height: 60px;
+    }
+    .hamburger {
+        display: block;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        z-index: 10;
+    }
+    .hamburger div {
+        width: 30px;
+        height: 4px;
+        background-color: black;
+        margin: 6px 0;
+        transition: 0.4s;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        margin-top: 10px;
+        display: none;
+        width: 100%;
+    }
+    nav ul.active {
+        display: flex;
+    }
+    nav ul li {
+        display: block;
+    }
+    .contact-btn {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+    }
+    .mobile-contact {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        padding: 12px 24px;
+        background: white;
+        color: #0694C3;
+        border: 2px solid #0694C3;
+        border-radius: 15px;
+        font-weight: bold;
+        transition: background 0.3s;
+        text-decoration: none;
+    }
+    .mobile-contact:hover {
+        background: #ff685b;
+        color: white;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 5%;
+    }
+    .hero-content {
+        width: 100%;
+    }
+    .hero-content h1 {
+        font-size: 28px;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 400px;
+    }
+}
+
+
+
+
+
+
+
+        .features {
+            display: flex;
+            justify-content: space-around;
+            padding: 50px 10%;
+            padding-top: 20px;
+            gap: 30px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        .feature {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-radius: 8px;
+            width: 30%;
+            transition: all 0.3s;
+        }
+        .feature:hover{
+           border: 2px solid #0694C3;
+           
+
+        }
+        .feature h3 {
+            color: black;
+            font-size: 20px;
+        }
+
+/* features section mobile view */
+@media (max-width: 1024px) {
+    /* Tablet view adjustments */
+    header {
+        padding: 15px 30px;
+    }
+    nav ul {
+        gap: 20px;
+    }
+    nav ul li a {
+        font-size: 16px;
+    }
+    .contact-btn {
+        padding: 10px 20px;
+        width: auto;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 5%;
+    }
+    .hero-content, .hero-image {
+        width: 100%;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 450px;
+    }
+    .features {
+      margin-top:38%;
+     
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature {
+        width: 80%;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile view adjustments */
+    nav {
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+    .logo img {
+        height: 60px;
+    }
+    .hamburger {
+        display: block;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        z-index: 10;
+    }
+    .hamburger div {
+        width: 30px;
+        height: 4px;
+        background-color: black;
+        margin: 6px 0;
+        transition: 0.4s;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        margin-top: 10px;
+        display: none;
+        width: 100%;
+    }
+    nav ul.active {
+        display: flex;
+    }
+    nav ul li {
+        display: block;
+    }
+    .contact-btn {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+    }
+    .mobile-contact {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        padding: 12px 24px;
+        background: white;
+        color: #0694C3;
+        border: 2px solid #0694C3;
+        border-radius: 15px;
+        font-weight: bold;
+        transition: background 0.3s;
+        text-decoration: none;
+    }
+    .mobile-contact:hover {
+        background: #0694C3;
+        color: white;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 5%;
+    }
+    .hero-content, .hero-image {
+        width: 100%;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 350px;
+    }
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature {
+        width: 90%;
+    }
+}
+
+
+
+
+
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* aboutus */
+    .aboutus {
+    margin-top: -1%;
+   background-color: white;
+    display: flex;
+    gap: 200px;
+    /* animation: fadeIn 1.5s ease-in-out; */
+    
+}
+.abouttext{
+    padding-top: 10%;
+
+  
+}
+.abouttext span{
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+font-size: 30px;
+color: #0694C3;
+padding: 6px;
+}
+.abouttext p{
+    font-size: 18px;
+    color: #0694C3;
+    margin-bottom: 20px;
+    width: 70%;
+    color: #9a9f9e;
+    line-height: 1.9;
+    text-align: justify;
+    padding-top: 4px;
+
+}
+.abouthead{
+    
+    font-size: 30px;
+}
+
+/* about us mobile  */
+/* Existing CSS remains unchanged */
+
+@media (max-width: 1024px) {
+    /* Tablet view adjustments */
+    header {
+        padding: 15px 30px;
+    }
+    nav ul {
+        gap: 20px;
+    }
+    nav ul li a {
+        font-size: 16px;
+    }
+    .contact-btn {
+        padding: 10px 20px;
+        width: auto;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 5%;
+    }
+    .hero-content, .hero-image {
+        width: 100%;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 450px;
+    }
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature {
+        width: 80%;
+    }
+    .aboutus {
+        flex-direction: column;
+        text-align: center;
+        gap: 50px;
+        padding: 40px 5%;
+    }
+    .aboutimage img {
+        width: 100%;
+        max-width: 450px;
+    }
+    .abouttext p {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile view adjustments */
+    nav {
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+    .logo img {
+        height: 60px;
+    }
+    .hamburger {
+        display: block;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        z-index: 10;
+    }
+    .hamburger div {
+        width: 30px;
+        height: 4px;
+        background-color: black;
+        margin: 6px 0;
+        transition: 0.4s;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        margin-top: 10px;
+        display: none;
+        width: 100%;
+    }
+    nav ul.active {
+        display: flex;
+    }
+    nav ul li {
+        display: block;
+    }
+    .contact-btn {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+    }
+    .mobile-contact {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        padding: 12px 24px;
+        background: white;
+        color: #0694C3;
+        border: 2px solid #0694C3;
+        border-radius: 15px;
+        font-weight: bold;
+        transition: background 0.3s;
+        text-decoration: none;
+    }
+    .mobile-contact:hover {
+        background: #0694C3;
+        color: white;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 5%;
+    }
+    .hero-content, .hero-image {
+        width: 100%;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 350px;
+    }
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature {
+        width: 90%;
+    }
+    .aboutus {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+        padding: 30px 5%;
+    }
+    .aboutimage img {
+        width: 100%;
+        max-width: 350px;
+    }
+    .abouttext p {
+        width: 100%;
+    }
+}
+
+.services{
+
+   background-color: white;
+    padding-top: 2%;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+.servicetext h1{
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-weight: 600;
+}
+.servicetext span{
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+font-size: 30px;
+color: #0694C3;
+padding: 6px;
+}
+.servicesbox{
+    padding-top: 5%;
+    display: flex;
+}
+.serviceitem{
+    width: 30%;
+}
+.servicehead{
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+.features1{
+            display: flex;
+            justify-content: space-around;
+            padding: 50px 10%;
+            padding-top: 20px;
+            margin-top: 3%;
+            gap: 30px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        .features1 h1{
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .feature1{
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .feature1:hover{
+           border: 0.5px solid #0694C3;
+           
+
+        }
+        .feature1 p{
+            font-size: 14px;
+            text-align: center;
+            color: grey;
+            letter-spacing: 0.2px;
+            
+
+        }
+        .contact-btn {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+    }
+    .mobile-contact {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        padding: 12px 24px;
+        background: white;
+        color: #0694C3;
+        border: 2px solid #0694C3;
+        border-radius: 15px;
+        font-weight: bold;
+        transition: background 0.3s;
+        text-decoration: none;
+    }
+
+/* servies section mobile view  */
+
+@media (max-width: 1024px) {
+    /* Tablet view adjustments */
+    header {
+        padding: 15px 30px;
+    }
+    nav ul {
+        gap: 20px;
+    }
+    nav ul li a {
+        font-size: 16px;
+    }
+    .contact-btn {
+        padding: 10px 20px;
+        width: auto;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 5%;
+    }
+    .hero-content, .hero-image {
+        width: 100%;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 450px;
+    }
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+    .feature {
+        width: 80%;
+    }
+    .aboutus {
+        flex-direction: column;
+        text-align: center;
+        gap: 50px;
+        padding: 40px 5%;
+    }
+    .aboutimage img {
+        width: 100%;
+        max-width: 450px;
+    }
+    .abouttext p {
+        width: 100%;
+    }
+    .features1 {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .feature1 {
+        width: 45%;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile view adjustments */
+    nav {
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        gap: 10px;
+    }
+    .logo img {
+        height: 83px;
+    }
+    .hamburger {
+        display: block;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        z-index: 10;
+    }
+    .hamburger div {
+        width: 30px;
+        height: 4px;
+        background-color: black;
+        margin: 6px 0;
+        transition: 0.4s;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        margin-top: 10px;
+        display: none;
+        width: 100%;
+    }
+    nav ul.active {
+        display: flex;
+    }
+    nav ul li {
+        display: block;
+    }
+    .contact-btn {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+    }
+    .mobile-contact {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        padding: 12px 24px;
+        background: white;
+        color: #0694C3;
+        border: 2px solid #0694C3;
+        border-radius: 15px;
+        font-weight: bold;
+        transition: background 0.3s;
+        text-decoration: none;
+    }
+    .mobile-contact:hover {
+        background: #0694C3;
+        color: white;
+    }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 5%;
+    }
+    .hero-content, .hero-image {
+        width: 100%;
+    }
+    .hero-image img {
+        width: 100%;
+        max-width: 350px;
+    }
+    .features {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 0;
+    }
+    .feature {
+        width: 90%;
+    }
+    .aboutus {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+        padding: 30px 5%;
+    }
+    .aboutimage img {
+        width: 100%;
+        max-width: 350px;
+    }
+    .abouttext p {
+        width: 100%;
+    }
+    .features1 {
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+    }
+    .feature1 {
+        width: 90%;
+    }
+}
+
+
+.foot{
+background-image: url("../Images/bacground.jpeg");
+}
+
+        .footer{
+            display: flex;
+            justify-content: space-around;
+            color: white;
+            background-color: #FF811E; /* requested footer background color */
+            padding: 40px 5%;
+        }
+        .footer1{
+            padding: 50px;
+            padding-bottom: 3%;
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+            width: 30%;
+        }
+        .footer1 h1{
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #ffffff;
+            
+        }
+        .footer1 p{
+            font-size: 16px;
+            color: #ffffff;
+            font-weight: 300;
+            line-height: 1.5;
+        }
+        .footer2{
+            padding: 10px ;
+            padding-bottom: 3%;
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+            width: 20%;
+           
+        }
+        .footer2 h2{
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: left;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .footer2 li ul {
+            
+            display: flex;
+            gap: 10px;
+        }
+        .footer2 ul{
+            list-style-type:disc;
+            text-align: left;
+            color: #ffffff;
+        }
+
+        .footer2 a{
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.5;
+            opacity: 0.95;
+        }
+        .footer2 a:hover{
+            text-decoration: underline;
+            opacity: 1;
+        }
+        .footer3{
+            
+            padding: 10px;
+            padding-bottom: 3%;
+            display: flex;
+            gap: 2px;
+            flex-direction: column;
+            width: 25%;
+            padding-right: 5%;
+            
+        }
+        .footer3 h2{
+            font-size: 24px;
+            margin-bottom: 2px;
+            text-align: left;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .footer3 p{
+            margin: 10px;
+            font-size: 16px;
+            color: #ffffff;
+            font-weight: 300;
+            line-height: 1.5;
+        }
+        .footer3 span{
+            padding-right: 4px;
+            color: #ffffff;
+        }
+        .links{
+            display: flex;
+            gap: 20px;
+            padding-top: 3px;
+            justify-items: center;
+            padding-left: 20%;
+        }
+
+
+/* techology */
+.NGO\'s{
+    background-color: white;
+    margin-top: -3%;
+    
+}
+.NGO\'s span{
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+font-size: 38px;
+color: #0694C3;
+padding: 6px;
+}
+.technology h2{
+    padding-top: 4%;
+    font-size: 35px;
+            color: #0694C3;
+           text-align: center;
+          
+            line-height: 1.5;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.slide img {
+  width: 200px;
+  height: 90px;
+  animation: scroll 12s linear infinite;
+}
+
+.slide-track {
+  width: 100%;
+  display: flex;
+  gap: 3em;
+  overflow: hidden;
+}
+
+.slider {
+  margin-top: 20px;
+  background-color: white;
+  padding: 8em 2em;
+}
+
+@keyframes scroll {
+  0% {transform: translateX(0);}
+  100% {transform: translatex(-860%)}
+}
+
+/* NGO logos slider */
+.ngo-slider {
+  width: 100%;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+.ngo-track {
+  display: flex;
+  gap: 3rem;
+  animation: scrollNGO 20s linear infinite;
+}
+
+.ngo-track img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+
+/* Keyframes for smooth scrolling */
+@keyframes scrollNGO {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+
+
+/* contact us  */
+/* General Styles */
+/* General Styles */
+.contact {
+    width: 100%;
+    background-color: white;
+    padding: 5% 10%;
+}
+
+.contain {
+    background-color: white;
+    max-width: 1170px;
+    width: 100%;
+    margin: auto;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.form {
+    background-color: white;
+}
+
+.contact-wrapper {
+    margin-top: 20px;
+}
+
+/* Form Styling */
+.form span {
+text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+font-size: 30px;
+color: #0694C3;
+font-size: 30px;
+}
+
+.submit-btn, .reset-btn {
+    width: 100%;
+    text-align: center;
+}
+
+.form-headline:after {
+    content: "";
+    display: block;
+    width: 50px;
+    border-bottom: 3px solid #0694C3;
+    margin-top: 10px;
+}
+
+.form-input, textarea {
+    width: 100%;
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+textarea {
+    resize: none;
+}
+
+button, .submit-btn {
+    background: transparent;
+    border: 1px solid #0694C3;
+    color: #0694C3;
+    border-radius: 15px;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+button:hover, .submit-btn:hover {
+    background: #0694C3;
+    color: white;
+}
+
+.error {
+    color: #ec1c24;
+}
+
+/* Contact Details */
+.contacts {
+    color: #212d31;
+    text-align: center;
+    padding: 20px;
+}
+
+.hightlight-contact-info {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.email-info {
+    margin-top: 15px;
+}
+
+
+
+
+/* Responsive Styles */
+@media (min-width: 700px) {
+    .contact{
+        width: 79%;
+    }
+    .wrapper {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+    .submit-btn, .reset-btn {
+        width: auto;
+    }
+    .footer {
+        flex-direction: row;
+        justify-content: space-around;
+        text-align: left;
+    }
+    .footer1, .footer2, .footer3 {
+        max-width: 250px;
+        text-align: left;
+    }
+}
+
+@media (max-width: 699px) {
+    .contact{    width: 79%;}
+    .wrapper {
+        flex-direction: column;
+    }
+    .form span {
+        font-size: 16px;
+    }
+    .hightlight-contact-info {
+        font-size: 16px;
+    }
+    .footer {
+        width: 70%;
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer1, .footer2, .footer3 {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 70px;
+        text-align: center;
+    }
+    .footer .links {
+        justify-content: center;
+    }
+}
+
+
+/* Default: Desktop Layout (Image on Left, Text on Right) */
+.aboutimage img {
+   
+    content: url('../Images/aboutusimg.png'); /* Default Image */
+}
+
+
+
+/* For Tablets (width up to 1024px) */
+@media (max-width: 1024px) {
+    .aboutus {
+        flex-direction: column-reverse; /* Text Above, Image Below */
+        text-align: center;
+    }
+
+    .aboutimage img {
+        content: url('Images/aboutimg.png'); /* Tablet Image */
+        width: 400px; /* Adjust size */
+    }
+}
+
+/* For Mobile Devices (width up to 768px) */
+@media (max-width: 768px) {
+    .aboutus {
+        flex-direction: column-reverse; /* Text Above, Image Below */
+        text-align: center;
+    }
+
+    .aboutimage img {
+        content: url('Images/aboutimg.png'); /* Mobile Image */
+        width: 300px; /* Adjust size */
+    }
+}
+    </style>
+    <link rel="icon" type="image/x-icon"  href="../Images/logo.png">
+</head>
+
+<link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
+<body data-user='<%= JSON.stringify(userData || null) %>'>
+    <div class="main" id="main">
+    <header style="width: 100%; background-color: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: fixed; top: 0; left: 0; z-index: 999;">
+  <nav style="display: flex; align-items: center; justify-content: space-between; height: 45px; padding: 0 20px; font-family: Arial, sans-serif; line-height: 1;">
+
+    <!-- Logo (Left) -->
+   <div class="logo" style="flex: 1; display: flex; align-items: center;">
+  <a href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;" style="display: inline-block;">
+    <img src="../Images/logo_nobg.png" alt="Logo" height="100" style="vertical-align: middle; margin-left: -50px;">
+  </a>
+</div>
+
+
+    <!-- Center Nav Links -->
+<ul style="flex: 2; display: flex; justify-content: center; align-items: center; list-style: none; margin: 0; padding: 0; gap: 30px;">
+<li><a href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">Home</a></li>
+<li><a href="#aboutus" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">About us</a></li>
+<li><a href="#services" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">Services</a></li>
+<li><a href="#NGO's" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">NGO's</a></li>
+        <% if (userData && userData.role === 'donor') { %>
+            <li><a href="/donations" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">Donations / Rewards</a></li>
+        <% } %>
+          <% if (userData && userData.role === 'ngo') { %>
+            <li><a href="/donationsNGO" style="text-decoration: none; color: #3d2b2b; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif;">Donations</a></li>
+        <% } %>
+    </ul>
+
+    <!-- Login/Register (Right) -->
+<div id="userSection" style="flex: 1; text-align: right; padding-right: 70px;">
+  <% if (userData) { %>
+    <div style="display: inline-flex; align-items: center; gap: 8px; background-color: white; color: black; font-size: 18px; font-weight: 600; padding: 6px 14px; border-radius: 8px;">
+      <span style="font-size: 18px;">👤</span>
+      <%= userData.name %>
+      <a href="/logout" style="margin-left: 10px; font-size: 14px; color: red; text-decoration: none;">Logout</a>
+    </div>
+  <% } else { %>
+    <a href="#" onclick="openLoginModal()" 
+       style="display: inline-flex; align-items: center; gap: 6px; background-color: white; color: black; font-size: 18px; font-weight: 600; text-decoration: none; padding: 6px 14px; border-radius: 8px;">
+      <span style="font-size: 18px;">👤</span>
+      Login / Register
+    </a>
+  <% } %>
+</div>
+
+
+    </nav>
+</header>
+
+
+
+    
+    <section class="hero">
+        <div class="hero-content">
+  <h1><span>Bridge the Gap </span> <br> <span>End Food Waste</span></h1>
+  <p>Connect surplus food from restaurants and individuals with verified NGOs. Together, we can fight hunger while reducing food waste in our communities.</p>
+<div style="flex: 1; text-align: right; padding-right: 20px;">
+  <button class="contact-btn" onclick="handleDonate()" 
+          style="background-color:#1E40AF; color:white; padding:6px 14px; border-radius:8px; font-weight:600; border:none; cursor:pointer;">
+    Donate
+  </button>
+</div>
+
+  
+</div>
+
+       <div class="hero-image">
+  <img id="slideshow" src="/Images/feed1.png" alt="FoodBridge Slideshow" width="550" style="opacity: 1;">
+</div>
+
+<style>
+  .hero-image img {
+    transition: opacity 1s ease-in-out;
+  }
+</style>
+
+<script>
+  const images = [
+    "/Images/feed1.png",
+    "/Images/feed2.png",
+    "/Images/feed3.png"
+  ];
+
+  let currentIndex = 0;
+  const slideshow = document.getElementById("slideshow");
+
+  function changeImage() {
+    // Fade out
+    slideshow.style.opacity = 0;
+
+    // Wait for fade out to complete before changing image
+    setTimeout(() => {
+      currentIndex = (currentIndex + 1) % images.length;
+      slideshow.src = images[currentIndex];
+      // Fade in
+      slideshow.style.opacity = 1;
+    }, 1000); // Delay matches the CSS transition time
+  }
+
+  setInterval(changeImage, 4000); // Change image every 4 seconds
+</script>
+ 
+ <script>
+ // --- Inline toast helpers ---
+ function showToast(message, timeout = 10000) {
+     const toast = document.getElementById('toast');
+     const msg = document.getElementById('toast-msg');
+     if (!toast || !msg) return;
+    msg.textContent = message;
+    // ensure error color (red) for invalid credential popups
+    toast.style.background = '#ef4444';
+    toast.style.display = 'block';
+    toast.style.opacity = '1';
+     setTimeout(() => {
+         toast.style.transition = 'opacity 300ms';
+         toast.style.opacity = '0';
+         setTimeout(() => { toast.style.display = 'none'; toast.style.transition = ''; }, 300);
+     }, timeout);
+ }
+
+ document.addEventListener('DOMContentLoaded', () => {
+     // Intercept login form submission to show inline errors instead of redirecting on failure
+     const loginForm = document.querySelector('#login-tab form.login-form');
+     if (loginForm) {
+         loginForm.addEventListener('submit', async (e) => {
+             e.preventDefault();
+             // build URL-encoded body so express.urlencoded can parse it
+             const fd = new FormData(loginForm);
+             const params = new URLSearchParams();
+             for (const [k, v] of fd.entries()) params.append(k, v);
+             try {
+                 const res = await fetch(loginForm.action || '/login', {
+                     method: loginForm.method || 'POST',
+                     headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                     body: params.toString(),
+                     credentials: 'same-origin'
+                 });
+                const ct = res.headers.get('content-type') || '';
+                if (ct.includes('application/json')) {
+                    const body = await res.json();
+                    if (res.ok && body.redirect) {
+                        // login successful
+                        window.location.href = body.redirect;
+                        return;
+                    }
+                    showToast(body.message || 'Invalid credentials');
+                    return;
+                }
+                if (res.ok) {
+                    // non-json success — fallback reload
+                    location.reload();
+                    return;
+                }
+                showToast('Invalid email or password');
+             } catch (err) {
+                 showToast('Network error — try again');
+             }
+         });
+     }
+
+     // Intercept donor & NGO register forms to validate and show inline errors
+     const donorForm = document.getElementById('donorForm');
+     const ngoForm = document.getElementById('ngoForm');
+     [donorForm, ngoForm].forEach(form => {
+         if (!form) return;
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fd = new FormData(form);
+            const params = new URLSearchParams();
+            for (const [k, v] of fd.entries()) params.append(k, v);
+            try {
+                const res = await fetch(form.action || '/registrationUser', {
+                    method: form.method || 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                    body: params.toString(),
+                    credentials: 'same-origin'
+                });
+                const ct = res.headers.get('content-type') || '';
+                if (ct.includes('application/json')) {
+                    const body = await res.json();
+                    if (res.ok && body.redirect) {
+                        window.location.href = body.redirect;
+                        return;
+                    }
+                    showToast(body.message || 'Registration error');
+                    return;
+                }
+                if (res.ok) {
+                    showToast('Registration successful — please login', 2500);
+                    setTimeout(() => { showTab('login'); }, 1200);
+                    return;
+                }
+                showToast('Registration failed — check details');
+             } catch (err) {
+                 showToast('Network error — try again');
+             }
+         });
+     });
+ });
+ </script>
+   
+    </section>
+</div>
+    
+    <section class="features">
+        <div class="feature">
+            <img src="../Images/meals_served.png" alt="Meals served" width="60">
+            <h3>Meals served</h3>
+            <hr width="25%" color="#0694C3">
+            <p style="font-weight: bold; font-size: 32px; color: green;">127,543</p>
+            <p>Lives touched through food donations</p> 
+            <p style="font-weight: bold; font-size: 15px; color: orange;">+23% this month</p>
+        </div>
+        <div class="feature">
+            <img src="../Images/Active_donors.png" alt="Active donors" width="60">
+            <h3>Active donors</h3>
+            <hr width="25%" color="#0694C3">
+            <p style="font-weight: bold; font-size: 32px; color: green;">2,847</p>
+            <p>Restaurants and individuals donating</p> 
+            <p style="font-weight: bold; font-size: 15px; color: orange;">+15% this month</p>
+        </div>
+        <div class="feature">
+            <img src="../Images/Partnered_ngos.png" alt="Partnered ngos" width="60">
+            <h3>Partnered NGO's</h3>
+            <hr width="25%" color="#0694C3" >
+          <p style="font-weight: bold; font-size: 32px; color: green;">156</p>
+          <p>Verified organizations receiving food</p> 
+            <p style="font-weight: bold; font-size: 15px; color: orange;">+8% this month</p>
+        </div>
+    </section>
+    <section class="aboutus" id="aboutus">
+        <div class="aboutimage">
+            <img src="../Images/aboutusimg.png" alt="About Us Image" width="500">
+        </div>
+        <div class="abouttext">
+            <h1><span>Our Vision</span> </h1>
+                <p>We bridge the gap between generous food donors and NGOs dedicated to hunger relief. Our mission is to reduce food waste and fight hunger by making food donation simple, smart, and impactful.
+Through our platform, individuals, restaurants, and event organizers can donate excess food in just a few taps. Our intelligent chatbot ensures smooth communication, while real-time GPS tracking keeps you informed about your food’s journey. 
+Once the donation is successfully delivered, we reward your contribution — because every act of kindness deserves appreciation.</p>
+
+<p>At FoodBridge, we believe no meal should go to waste when a hungry soul can be fed.</p>
+        </div>
+    </section>
+
+  <section class="NGO's" id="NGO's" style="text-align: center; padding: 2rem; overflow: hidden;">
+  <h1><span>Our Top Partner NGOs</span></h1>
+
+  <div class="ngo-slider">
+    <div class="ngo-track">
+      <img src="/Images/ngo1.png" alt="Feeding India">
+      <img src="/Images/ngo2.png" alt="Robin Hood Army">
+      <img src="/Images/ngo3.png" alt="Akshaya Patra">
+      <img src="/Images/ngo4.png" alt="Goonj">
+      <!-- Repeat images for smooth infinite loop -->
+      <img src="/Images/ngo1.png" alt="Feeding India">
+      <img src="/Images/ngo2.png" alt="Robin Hood Army">
+      <img src="/Images/ngo3.png" alt="Akshaya Patra">
+      <img src="/Images/ngo4.png" alt="Goonj">
+    </div>
+  </div>
+</section>
+
+
+
+
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeLoginModal()">&times;</span>
+
+    <!-- Tabs -->
+    <div class="tab-buttons">
+      <button class="tab-btn active" onclick="showTab('login')">Login</button>
+      <button class="tab-btn" onclick="showTab('register')">Register</button>
+    </div>
+
+    <!-- Login Tab -->
+    <div class="tab-content" id="login-tab">
+      <h2 class="modal-title">Welcome Back</h2>
+
+      <button class="google-login-btn" onclick="loginWithGoogle()">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo">
+        Login with Google
+      </button>
+
+      <div class="divider"><span>OR</span></div>
+
+      <form class="login-form" action="/login" method="post" >
+        <label>Email</label>
+        <input type="email" name="email" required placeholder="you@example.com">
+
+        <label>Password</label>
+        <input type="password" name="password" required placeholder="Enter your password">
+
+        <button type="submit" class="submit-btn">Login</button>
+            </form>
+
+            <!-- Toast / Inline popup for errors -->
+            <div id="toast" aria-live="polite" style="position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-8px); background:#ef4444; color:white; padding:12px 16px; border-radius:8px; display:none; z-index:10000; box-shadow:0 6px 18px rgba(0,0,0,0.3); max-width:90%;">
+                <span id="toast-msg"></span>
+            </div>
+    </div>
+
+        <!-- Register Tab -->
+        <div class="tab-content" id="register-tab" style="display:none;">
+            <h2 class="modal-title">Create Account</h2>
+
+            <!-- Role choice -->
+            <div id="registerChoice" style="display:flex; gap:12px; justify-content:space-around; margin-top:12px;">
+                <button type="button" onclick="showRegisterForm('donor')" 
+                                style="flex:1; padding:16px; border-radius:10px; border:2px solid #10B981; background:#10B981; color:white; font-weight:700; font-size:16px; cursor:pointer;">Donor</button>
+                <button type="button" onclick="showRegisterForm('ngo')" 
+                                style="flex:1; padding:16px; border-radius:10px; border:2px solid #0694C3; background:#0694C3; color:white; font-weight:700; font-size:16px; cursor:pointer;">NGO</button>
+            </div>
+
+            <!-- Donor Form -->
+            <form id="donorForm" class="login-form form-card" action="/registrationUser" method="post" style="display:none; margin-top:12px;" onsubmit="return validateDonorForm()">
+                <input type="hidden" name="role" value="donor">
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="donor-fullname" style="color: #4B5563;">
+                        <i class="ri-user-line" style="margin-right: 8px;"></i>Name
+                    </label>
+                    <input id="donor-fullname" class="form-input" type="text" name="fullname" required 
+                           placeholder="Your name" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-user-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
+                </div>
+
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="donor-email" style="color: #4B5563;">
+                        <i class="ri-mail-line" style="margin-right: 8px;"></i>Email
+                    </label>
+                    <input id="donor-email" class="form-input" type="email" name="email" required 
+                           placeholder="you@example.com" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-mail-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
+                </div>
+
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="donor-password" style="color: #4B5563;">
+                        <i class="ri-lock-line" style="margin-right: 8px;"></i>Password
+                    </label>
+                    <div class="input-with-btn" style="position: relative;">
+                        <input id="donor-password" class="form-input" type="password" name="password" required 
+                               placeholder="Create a password" style="padding-left: 40px; padding-right: 40px; transition: all 0.3s ease;">
+                        <i class="ri-lock-line" style="position: absolute; left: 12px; top: 12px; color: #9CA3AF;"></i>
+                        <button type="button" class="icon-btn password-toggle" onclick="togglePassword('donor-password', this)"
+                                aria-label="Toggle password visibility">
+                            <i class="ri-eye-off-line"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="donor-confirm" style="color: #4B5563;">
+                        <i class="ri-checkbox-circle-line" style="margin-right: 8px;"></i>Confirm Password
+                    </label>
+                    <div class="input-with-btn" style="position: relative;">
+                        <input id="donor-confirm" class="form-input" type="password" name="confirmPassword" required 
+                               placeholder="Confirm password" style="padding-left: 40px; padding-right: 40px; transition: all 0.3s ease;">
+                        <i class="ri-checkbox-circle-line" style="position: absolute; left: 12px; top: 12px; color: #9CA3AF;"></i>
+                        <button type="button" class="icon-btn password-toggle" onclick="togglePassword('donor-confirm', this)"
+                                aria-label="Toggle password visibility">
+                            <i class="ri-eye-off-line"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-actions" style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="submit-btn" 
+                            style="flex: 2; background: #0694C3; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">
+                        <i class="ri-user-add-line" style="margin-right: 8px;"></i>Register as Donor
+                    </button>
+                    <button type="button" onclick="backToChoice()" class="secondary-btn"
+                            style="flex: 1; background: #F3F4F6; color: #4B5563; border: 1px solid #E5E7EB; padding: 12px; border-radius: 8px; font-weight: 500; transition: all 0.3s ease;">
+                        Back
+                    </button>
+                </div>
+            </form>
+
+            <!-- NGO Form -->
+            <form id="ngoForm" class="login-form form-card" action="/registrationUser" method="post" style="display:none; margin-top:12px;" onsubmit="return validateNgoForm()">
+                <input type="hidden" name="role" value="ngo">
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-fullname" style="color: #4B5563;">
+                        <i class="ri-building-line" style="margin-right: 8px;"></i>Organization Name
+                    </label>
+                    <input id="ngo-fullname" class="form-input" type="text" name="fullname" required 
+                           placeholder="Organization / Contact name" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-building-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
+                </div>
+
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-email" style="color: #4B5563;">
+                        <i class="ri-mail-line" style="margin-right: 8px;"></i>Email
+                    </label>
+                    <input id="ngo-email" class="form-input" type="email" name="email" required 
+                           placeholder="organization@example.com" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-mail-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
+                </div>
+
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-password" style="color: #4B5563;">
+                        <i class="ri-lock-line" style="margin-right: 8px;"></i>Password
+                    </label>
+                    <div class="input-with-btn" style="position: relative;">
+                        <input id="ngo-password" class="form-input" type="password" name="password" required 
+                               placeholder="Create a password" style="padding-left: 40px; padding-right: 40px; transition: all 0.3s ease;">
+                        <i class="ri-lock-line" style="position: absolute; left: 12px; top: 12px; color: #9CA3AF;"></i>
+                        <button type="button" class="icon-btn password-toggle" onclick="togglePassword('ngo-password', this)"
+                                aria-label="Toggle password visibility">
+                            <i class="ri-eye-off-line"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-confirm" style="color: #4B5563;">
+                        <i class="ri-checkbox-circle-line" style="margin-right: 8px;"></i>Confirm Password
+                    </label>
+                    <div class="input-with-btn" style="position: relative;">
+                        <input id="ngo-confirm" class="form-input" type="password" name="confirmPassword" required 
+                               placeholder="Confirm password" style="padding-left: 40px; padding-right: 40px; transition: all 0.3s ease;">
+                        <i class="ri-checkbox-circle-line" style="position: absolute; left: 12px; top: 12px; color: #9CA3AF;"></i>
+                        <button type="button" class="icon-btn password-toggle" onclick="togglePassword('ngo-confirm', this)"
+                                aria-label="Toggle password visibility">
+                            <i class="ri-eye-off-line"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-phone" style="color: #4B5563;">
+                        <i class="ri-phone-line" style="margin-right: 8px;"></i>Phone Number
+                    </label>
+                    <input id="ngo-phone" class="form-input" type="tel" name="phone" required
+                           placeholder="Your phone number" pattern="[0-9]{10}" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-phone-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
+                </div>
+
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-pan" style="color: #4B5563;">
+                        <i class="ri-profile-line" style="margin-right: 8px;"></i>PAN ID
+                    </label>
+                    <input id="ngo-pan" class="form-input" type="text" name="pan" required
+                           placeholder="Enter PAN ID" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-profile-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
+                </div>
+
+                <div class="form-row" style="position: relative;">
+                    <label class="form-label" for="ngo-darpan" style="color: #4B5563;">
+                        <i class="ri-government-line" style="margin-right: 8px;"></i>Darpan ID
+                    </label>
+                    <input id="ngo-darpan" class="form-input" type="text" name="darpan" required
+                           placeholder="Enter Darpan ID" style="padding-left: 40px; transition: all 0.3s ease;">
+                    <i class="ri-government-line" style="position: absolute; left: 12px; top: 38px; color: #9CA3AF;"></i>
+                </div>
+
+                <div class="form-actions" style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="submit-btn" 
+                            style="flex: 2; background: #0694C3; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">
+                        <i class="ri-building-2-line" style="margin-right: 8px;"></i>Register as NGO
+                    </button>
+                    <button type="button" onclick="backToChoice()" class="secondary-btn"
+                            style="flex: 1; background: #F3F4F6; color: #4B5563; border: 1px solid #E5E7EB; padding: 12px; border-radius: 8px; font-weight: 500; transition: all 0.3s ease;">
+                        Back
+                    </button>
+                </div>
+            </form>
+
+            <style>
+            .form-input:focus {
+                border-color: #0694C3;
+                box-shadow: 0 0 0 2px rgba(6, 148, 195, 0.1);
+                outline: none;
+            }
+            
+            .form-row {
+                margin-bottom: 16px;
+            }
+
+            .form-label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                font-size: 0.9rem;
+            }
+
+            .submit-btn:hover {
+                background: #0576A0 !important;
+                transform: translateY(-1px);
+            }
+
+            .secondary-btn:hover {
+                background: #E5E7EB !important;
+            }
+
+            .input-with-btn .icon-btn {
+                position: absolute;
+                right: 8px;
+                top: 8px;
+                background: none;
+                border: none;
+                padding: 4px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+            }
+
+            .input-with-btn .icon-btn:hover {
+                background-color: rgba(6, 148, 195, 0.1);
+                color: #0694C3 !important;
+            }
+
+            .input-with-btn .icon-btn i {
+                font-size: 1.2rem;
+                transition: all 0.2s ease;
+            }
+
+            .password-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 24px;
+                height: 24px;
+            }
+
+            .password-toggle i {
+                color: #9CA3AF;
+                font-size: 1.2rem;
+            }
+
+            .password-toggle:hover i {
+                color: #0694C3;
+            }
+            </style>
+
+            <script>
+            function togglePassword(fieldId, btn) {
+                const field = document.getElementById(fieldId);
+                const icon = btn.querySelector('i');
+                
+                if (field.type === 'password') {
+                    field.type = 'text';
+                    icon.classList.remove('ri-eye-off-line');
+                    icon.classList.add('ri-eye-line');
+                } else {
+                    field.type = 'password';
+                    icon.classList.remove('ri-eye-line');
+                    icon.classList.add('ri-eye-off-line');
+                }
+
+                // Add subtle animation
+                icon.style.transform = 'scale(0.8)';
+                setTimeout(() => {
+                    icon.style.transform = 'scale(1)';
+                }, 100);
+            }
+                function showRegisterForm(type) {
+                    document.getElementById('registerChoice').style.display = 'none';
+                    if (type === 'donor') {
+                        document.getElementById('donorForm').style.display = 'block';
+                        document.getElementById('ngoForm').style.display = 'none';
+                    } else {
+                        document.getElementById('ngoForm').style.display = 'block';
+                        document.getElementById('donorForm').style.display = 'none';
+                    }
+                }
+                function backToChoice() {
+                    document.getElementById('registerChoice').style.display = 'flex';
+                    document.getElementById('donorForm').style.display = 'none';
+                    document.getElementById('ngoForm').style.display = 'none';
+                }
+                function togglePassword(fieldId, btn) {
+                    const f = document.getElementById(fieldId);
+                    if (!f) return;
+                    if (f.type === 'password') { f.type = 'text'; btn.textContent = '🙈'; }
+                    else { f.type = 'password'; btn.textContent = '👁️'; }
+                }
+                function validateDonorForm() {
+                    const p = document.getElementById('donor-password');
+                    const c = document.getElementById('donor-confirm');
+                    if (p && c && p.value !== c.value) { alert('Passwords do not match'); return false; }
+                    return true;
+                }
+                function validateNgoForm() {
+                    const p = document.getElementById('ngo-password');
+                    const c = document.getElementById('ngo-confirm');
+                    if (p && c && p.value !== c.value) { alert('Passwords do not match'); return false; }
+                    return true;
+                }
+            </script>
+        </div>
+  </div>
+</div>
+
+
+    </section>
+
+    <section class="services" id="services" style="padding: 40px; background-color: #f9f9f9;">
+    <div class="servicetext" style="max-width: 800px; margin: 0 auto; font-family: Arial, sans-serif;">
+        <h1 style="font-size: 28px; text-align: center; color: #333;">
+            <span>How will your donations be used?</span>
+        </h1>
+        <ul style="list-style: none; padding: 0; margin-top: 30px;">
+            <li style="margin-bottom: 20px; font-size: 16px; line-height: 1.6; color: #555;">
+                🥗 <strong>Food Collection & Distribution:</strong><br>
+                Ensures timely pickup of surplus food from restaurants, events, and households and delivers it safely to verified NGOs and communities in need.
+            </li>
+            <li style="margin-bottom: 20px; font-size: 16px; line-height: 1.6; color: #555;">
+                🚚 <strong>Logistics & Transportation:</strong><br>
+                Supports fuel and transportation costs for our delivery volunteers and vehicles to reach remote or underserved areas.
+            </li>
+            <li style="margin-bottom: 20px; font-size: 16px; line-height: 1.6; color: #555;">
+                🤝 <strong>NGO Support & Coordination:</strong><br>
+                Helps maintain strong partnerships with local NGOs, ensuring food reaches the right hands efficiently and responsibly.
+            </li>
+            <li style="margin-bottom: 20px; font-size: 16px; line-height: 1.6; color: #555;">
+                📦 <strong>Packaging & Safety:</strong><br>
+                Covers packaging material and hygiene supplies to keep food fresh, safe, and ready for redistribution.
+            </li>
+            <li style="margin-bottom: 20px; font-size: 16px; line-height: 1.6; color: #555;">
+                💡 <strong>Technology & Outreach:</strong><br>
+                Funds platform maintenance, chatbot support, GPS tracking, and public awareness campaigns to expand our impact.
+            </li>
+        </ul>
+    </div>
+</section>
+
+    
+    <div class="foot">
+    <footer class="footer">
+        <div class="footer1">
+            <h1>FoodBridge</h1>
+            <p>Connecting surplus food with those in need. Building bridges to end hunger and reduce food waste in our communities.</p>
+            <div class="links">
+                <a href="#"><img src="../Images/footer/facebook (1).png" width="30" height="30" alt="Facebook"></a>
+                <a href="#"><img src="../Images/footer/instagram.png" width="30" height="30" alt="Instagram"></a>
+                <a href="#"><img src="..//Images/footer/linkedin.png" width="30" height="30" alt="LinkedIn"></a>
+                <a href="#"><img src="../Images/footer/twitter.png" width="30" height="30" alt="Twitter"></a>
+            </div>
+        </div>
+        <div class="footer2">
+            <h2>Quick Links</h2>
+            <ul>
+                <li><a href="#main">Home</a></li>
+                <li><a href="#aboutus">About Us</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#NGO's">NGO's</a></li>
+        </div>
+        <div class="footer3">
+            <h2>Get In Touch</h2>
+            <p></p>
+            <p><span><i class="ri-map-pin-fill"></i></span>A.S.Rao Nagar,Old safilguda,Secundrabad</p>
+            <p><span><i class="ri-phone-fill"></i></span>9542538773</p>
+            <p><span><i class="ri-mail-fill"></i></span>Info.FoodBridge.co@gmail.com</p>
+
+        </div>
+    </footer>
+</div>
+<!-- 💬 Chatbot Widget -->
+<div id="chatbot-container" class="chatbot-container hidden">
+  <div class="chatbot-header">🤖 FoodBridge Chat</div>
+  <div id="chatbot-messages" class="chatbot-messages"></div>
+  <div class="chatbot-input">
+    <input id="chatbot-input-field" type="text" placeholder="Ask something..." />
+    <button id="chatbot-send-btn">Send</button>
+  </div>
+</div>
+
+<button id="chatbot-toggle-btn" class="chatbot-toggle">💬</button>
+
+<style>
+  .chatbot-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff5a5f;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 9999;
+  }
+  .chatbot-container {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 320px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+  }
+  .chatbot-header {
+    background-color: #ff5a5f;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+  }
+  .chatbot-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 300px;
+    font-size: 14px;
+  }
+  .chatbot-input {
+    display: flex;
+    border-top: 1px solid #ddd;
+  }
+  .chatbot-input input {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    outline: none;
+  }
+  .chatbot-input button {
+    background-color: #ff5a5f;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  .chatbot-container.hidden { display: none; }
+</style>
+
+    <!-- Donation Modal Overlay -->
+<div id="donationModal" style="display:none; position:fixed; inset:0; background-color:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center;">
+  <div style="background:white; border-radius:12px; width:360px; max-width:90%; padding:20px; box-shadow:0 8px 25px rgba(0,0,0,0.3);">
+    
+    <!-- Header -->
+    <h2 id="donationTitle" style="text-align:center; font-size:20px; font-weight:700; margin-bottom:15px;">Choose Donation Type</h2>
+    
+    <!-- Type Selection Buttons -->
+    <div id="donationTypeSelection" style="display:flex; justify-content:center; gap:15px; margin-bottom:20px;">
+      <button onclick="showForm('monetary')" style="flex:1; padding:10px; border-radius:8px; border:none; background:#1E40AF; color:white; font-weight:600; cursor:pointer;">Monetary</button>
+      <button onclick="showForm('food')" style="flex:1; padding:10px; border-radius:8px; border:none; background:#10B981; color:white; font-weight:600; cursor:pointer;">Food</button>
+    </div>
+
+    <!-- Monetary Form -->
+    <form id="monetaryForm" action="/donate/money" method="POST" style="display:none; flex-direction:column; gap:12px;">
+      <input type="text" name="name" placeholder="Name" required style="padding:8px; border-radius:6px; border:1px solid #ccc;">
+      <input type="text" name="address" placeholder="Address" required style="padding:8px; border-radius:6px; border:1px solid #ccc;">
+      <input type="number" name="amount" placeholder="Amount" required style="padding:8px; border-radius:6px; border:1px solid #ccc;">
+      
+      <!-- UPI Section with QR -->
+      <div style="text-align: center; margin: 15px 0;">
+        <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Scan QR or use UPI ID</p>
+        <img src="../Images/qr.png" alt="UPI QR Code" style="width:200px; height:200px; margin:10px auto; border:1px solid #eee;">
+        <img src="data:image/png;base64,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" alt="UPI QR Code" style="width:150px; height:150px; margin:10px auto;">
+        <div style="display:flex; align-items:center; padding:8px; border-radius:6px; border:1px solid #ccc; background:#f5f5f5; margin:10px auto; max-width:250px;">
+          <input type="text" value="9542538773@naviaxis" readonly style="padding:8px; background:transparent; border:none; flex:1; color:#666; font-size:13px;">
+          <button type="button" onclick="copyUPI()" style="padding:3px 6px; border:none; background:#1E40AF; color:white; border-radius:3px; font-size:11px; cursor:pointer;">Copy</button>
+        </div>
+      </div>
+      
+      <button type="submit" style="padding:10px; border:none; border-radius:8px; background:#1E40AF; color:white; font-weight:600; cursor:pointer;">Donate</button>
+      <button type="button" onclick="closeModal()" style="padding:10px; border:none; border-radius:8px; background:red; color:white; font-weight:600; cursor:pointer;">Cancel</button>
+      
+      <script>
+      function copyUPI() {
+        navigator.clipboard.writeText("9542538773@naviaxis").then(() => {
+          alert("UPI ID copied to clipboard!");
+        });
+      }
+      </script>
+    </form>
+
+   <!-- Food Form -->
+<form id="foodForm" action="/donate/food" method="POST" style="display:none; flex-direction:column; gap:12px;">
+  <input type="text" name="name" placeholder="Name" required 
+         style="padding:10px; border-radius:6px; border:1px solid #ccc; font-size:14px;">
+  <input type="text" name="address" placeholder="Address" required 
+         style="padding:10px; border-radius:6px; border:1px solid #ccc; font-size:14px;">
+  <input type="tel" name="phone" placeholder="Phone number (10 digits)" pattern="[0-9]{10}" required
+      style="padding:10px; border-radius:6px; border:1px solid #ccc; font-size:14px;">
+
+  <!-- Dropdown for Type of Food -->
+  <select name="foodType" required 
+          style="padding:10px; border-radius:6px; border:1px solid #ccc; background:white; font-size:14px;">
+    <option value="" disabled selected>Select Type of Food</option>
+    <option value="Veg">Veg</option>
+    <option value="Non-Veg">Non-Veg</option>
+  </select>
+
+  <!-- Food Item -->
+  <input type="text" name="foodItem" placeholder="Food Item (e.g., Rice, Fruits)" required 
+         style="padding:10px; border-radius:6px; border:1px solid #ccc; font-size:14px;">
+
+  <!-- Quantity -->
+  <input type="number" name="quantity" placeholder="Quantity" required 
+         style="padding:10px; border-radius:6px; border:1px solid #ccc; font-size:14px;">
+
+  <button type="submit" 
+          style="padding:12px; border:none; border-radius:8px; background:#10B981; color:white; font-weight:600; cursor:pointer; font-size:15px;">Donate</button>
+  <button type="button" onclick="closeModal()" 
+          style="padding:12px; border:none; border-radius:8px; background:red; color:white; font-weight:600; cursor:pointer; font-size:15px;">Cancel</button>
+</form>
+
+
+</div>
+</div>
+
+<script>
+// Read server-provided user info from body data attribute
+let __userData = null;
+try { __userData = JSON.parse(document.body.getAttribute('data-user')); } catch(e) { __userData = null; }
+const isLoggedIn = !!__userData;
+const currentUserRole = __userData ? __userData.role : null;
+
+function handleDonate() {
+    if (!isLoggedIn) {
+        alert('Please login first to donate!');
+        if (typeof openLoginModal === 'function') openLoginModal();
+        return;
+    }
+
+    const modal = document.getElementById('donationModal');
+    const sel = document.getElementById('donationTypeSelection');
+    const monetaryForm = document.getElementById('monetaryForm');
+    const foodForm = document.getElementById('foodForm');
+    const title = document.getElementById('donationTitle');
+
+    if (!modal) return;
+    modal.style.display = 'flex';
+    if (sel) sel.style.display = 'flex';
+    if (monetaryForm) monetaryForm.style.display = 'none';
+    if (foodForm) foodForm.style.display = 'none';
+    if (title) title.innerText = 'Choose Donation Type';
+}
+
+function showForm(type) {
+    const sel = document.getElementById('donationTypeSelection');
+    const monetaryForm = document.getElementById('monetaryForm');
+    const foodForm = document.getElementById('foodForm');
+    const title = document.getElementById('donationTitle');
+    if (sel) sel.style.display = 'none';
+    if (type === 'monetary') {
+        if (monetaryForm) monetaryForm.style.display = 'flex';
+        if (foodForm) foodForm.style.display = 'none';
+        if (title) title.innerText = 'Monetary Donation';
+    } else {
+        if (foodForm) foodForm.style.display = 'flex';
+        if (monetaryForm) monetaryForm.style.display = 'none';
+        if (title) title.innerText = 'Food Donation';
+    }
+}
+
+function closeModal() {
+    const modal = document.getElementById('donationModal');
+    if (modal) modal.style.display = 'none';
+}
+</script>
+
+</body>
+
+<script>
+    const nameEl = document.querySelector("#name");
+const emailEl = document.querySelector("#email");
+const companyNameEl = document.querySelector("#company-name");
+const messageEl = document.querySelector("#message");
+
+const form = document.querySelector("#submit-form");
+
+
+function reset() {
+  nameEl = "";
+  emailEl = "";
+  companyNameEl = "";
+  messageEl = "";
+  document.querySelector(".name-error").innerText = "";
+}
+
+function toggleMenu() {
+        document.querySelector("nav ul").classList.toggle("active");
+    }
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute("href").substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop - 80, // Adjust for navbar height
+                behavior: "smooth",
+            });
+        }
+    });
+});
+function openLoginModal() {
+  document.getElementById("loginModal").style.display = "flex";
+}
+function closeLoginModal() {
+  document.getElementById("loginModal").style.display = "none";
+}
+function loginWithGoogle() {
+  alert("Google login clicked — integrate Firebase or OAuth here.");
+}
+
+function showTab(tab) {
+  // Hide both tabs
+  document.getElementById('login-tab').style.display = 'none';
+  document.getElementById('register-tab').style.display = 'none';
+
+  // Remove active class
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+  // Show selected tab
+  if (tab === 'login') {
+    document.getElementById('login-tab').style.display = 'block';
+    document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+  } else {
+    document.getElementById('register-tab').style.display = 'block';
+    document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+  }
+}function openLoginModal() {
+  document.getElementById("loginModal").style.display = "flex";
+}
+function closeLoginModal() {
+  document.getElementById("loginModal").style.display = "none";
+}
+function loginWithGoogle() {
+  alert("Google login clicked — integrate Firebase or OAuth here.");
+}
+
+function showTab(tab) {
+  // Hide both tabs
+  document.getElementById('login-tab').style.display = 'none';
+  document.getElementById('register-tab').style.display = 'none';
+
+  // Remove active class
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+  // Show selected tab
+  if (tab === 'login') {
+    document.getElementById('login-tab').style.display = 'block';
+    document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+  } else {
+    document.getElementById('register-tab').style.display = 'block';
+    document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+  }
+}
+
+ function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  const token = getCookie('token');
+
+  if (token) {
+    // call your backend to get user info
+    fetch('/api/user', {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Invalid token');
+      return res.json();
+    })
+    .then(user => {
+      // replace login link with user info
+      const userSection = document.getElementById('userSection');
+      userSection.innerHTML = `
+        <div style="display: inline-flex; align-items: center; gap: 8px; background-color: white; color: black; font-size: 18px; font-weight: 600; padding: 6px 14px; border-radius: 8px;">
+          <span style="font-size: 18px;">👤</span>
+          ${user.name || 'User'}
+          <a href="#" onclick="logout()" style="margin-left: 10px; font-size: 14px; color: red; text-decoration: none;">Logout</a>
+        </div>
+      `;
+    })
+    .catch(() => {
+      // token invalid or API failed — clear cookie
+      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    });
+  }
+
+  function logout() {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    location.reload();
+  }
+</script>
+
+<script>
+  const toggleBtn = document.getElementById("chatbot-toggle-btn");
+  const chatbotContainer = document.getElementById("chatbot-container");
+  const sendBtn = document.getElementById("chatbot-send-btn");
+  const inputField = document.getElementById("chatbot-input-field");
+  const messagesDiv = document.getElementById("chatbot-messages");
+
+  toggleBtn.addEventListener("click", () => {
+    chatbotContainer.classList.toggle("hidden");
+  });
+
+  sendBtn.addEventListener("click", sendMessage);
+  inputField.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+
+  async function sendMessage() {
+    const userMsg = inputField.value.trim();
+    if (!userMsg) return;
+
+    appendMessage("You", userMsg);
+    inputField.value = "";
+
+    try {
+      const res = await fetch("/api/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMsg }),
+      });
+      const data = await res.json();
+      appendMessage("Bot", data.reply);
+    } catch (err) {
+      appendMessage("Bot", "⚠️ Error connecting to chatbot.");
+    }
+  }
+
+  function appendMessage(sender, text) {
+    const div = document.createElement("div");
+    div.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    messagesDiv.appendChild(div);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+</script>
+
+</html>
