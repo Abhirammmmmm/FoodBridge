@@ -143,7 +143,14 @@ router.post("/registrationUser", async (req, res) => {
   const email = (req.body.email || "").trim().toLowerCase();
   const password = req.body.password || "";
   const role = req.body.role || "donor";
-  const name = (req.body.fullname || "").trim();
+  const name = (req.body.name || "").trim();
+
+  if (!name || !email || !password) {
+  return res.status(400).json({
+    success: false,
+    message: "All fields required"
+  });
+}
 
   console.log("Register:", { email, name, role });
 
