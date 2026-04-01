@@ -140,10 +140,11 @@ router.post('/donate/food', async (req, res) => {
 
 // /routes/auth.js
 router.post("/registrationUser", async (req, res) => {
+  console.log("BODY DATA:", req.body);
   const email = (req.body.email || "").trim().toLowerCase();
   const password = req.body.password || "";
   const role = req.body.role || "donor";
-  const name = (req.body.name || "").trim();
+  const name = (req.body.fullname || "").trim();
 
   if (!name || !email || !password) {
   return res.status(400).json({
