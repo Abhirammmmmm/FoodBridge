@@ -30,19 +30,33 @@ Other Tools
 JWT Authentication
 Nodemailer (for email notifications)
 Google Maps API (for location services)
+
 📂 Project Structure
+
 FoodBridge/
 │
 ├── models/          # MongoDB schemas
+
 ├── routes/          # Express routes
+
 ├── views/           # EJS templates
+
 │   ├── partials/    # Header & Footer
+
 │   ├── index.ejs
+
 │   ├── donate.ejs
+
 │   ├── ngos.ejs
+
 │   └── rewards.ejs
+
 │
 ├── public/          # Static files (CSS, JS, images)
+
 ├── .env             # Environment variables
+
 ├── app.js           # Main server file
+
 └── package.json
+
